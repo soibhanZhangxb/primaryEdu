@@ -1,0 +1,32 @@
+.pulley-system-demo[data-v-4b0f2aed] {
+  box-sizing: border-box;
+  display: flex;
+  height: 100vh;
+  padding: 20px;
+}
+.control-panel[data-v-4b0f2aed] {
+  height: 100%;
+  margin-right: 20px;
+  overflow-y: auto;
+  width: 350px;
+}
+.canvas-container[data-v-4b0f2aed] {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  flex: 1;
+  overflow: hidden;
+}
+.physics-info[data-v-4b0f2aed] {
+  background-color: #f5f7fa;
+  border-radius: 4px;
+  margin-top: 20px;
+  padding: 10px;
+}
+.physics-info p[data-v-4b0f2aed] {
+  font-size: 14px;
+  margin: 5px 0;
+}
+.card-header[data-v-4b0f2aed] {
+  font-size: 18px;
+  font-weight: 700;
+}

@@ -1,0 +1,1026 @@
+import {
+  d as ae,
+  r as F,
+  a as z,
+  p,
+  m as re,
+  k as Y,
+  e as l,
+  g as a,
+  j,
+  z as w,
+  t as y,
+  e1 as E,
+  v as oe,
+  F as V,
+  l as D,
+  gz as le,
+  f as T,
+  aP as ie,
+  w as H,
+  h as M,
+  b as d,
+  i as g,
+  u as G,
+  _ as de
+} from "./index-ifxKUhWa.js";
+const ue = {
+    class:
+      "bg-gradient-to-br from-light to-gray-100 min-h-screen font-sans text-dark"
+  },
+  ge = { class: "container mx-auto p-4" },
+  ce = { class: "grid grid-cols-1 lg:grid-cols-4 gap-6" },
+  he = { class: "lg:col-span-1" },
+  ve = { class: "bg-white rounded-xl p-5 shadow-md h-full" },
+  fe = { class: "space-y-6" },
+  me = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  xe = { class: "grid grid-cols-2 gap-4" },
+  pe = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  ye = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  ke = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  be = { class: "border-t border-gray-200 pt-4" },
+  Ae = { class: "mt-3" },
+  we = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  Me = { class: "border-t border-gray-200 pt-4" },
+  _e = { class: "space-y-2" },
+  Pe = ["onUpdate:modelValue"],
+  Ce = { class: "ml-2 text-gray-600" },
+  Re = { class: "lg:col-span-3" },
+  Se = { class: "bg-white rounded-xl p-4 shadow-md" },
+  B = 600,
+  _ = 500,
+  We = ae({
+    name: "JCircle",
+    __name: "jcircle",
+    setup(Xe) {
+      const L = B / 2,
+        N = _ / 2,
+        e = F({
+          centerX: L,
+          centerY: N,
+          radius: 150,
+          stroke: "#3B82F6",
+          strokeWidth: 2,
+          fill: "rgba(59, 130, 246, 0.05)"
+        }),
+        r = F({
+          startAngle: 60,
+          endAngle: 210,
+          stroke: "#10B981",
+          strokeWidth: 2,
+          isVisible: !0
+        }),
+        h = F({
+          angle: 45,
+          length: 100,
+          stroke: "#EF4444",
+          strokeWidth: 2,
+          isVisible: !0
+        }),
+        o = F({
+          showCenter: [!0, "显示圆心"],
+          showRadius: [!0, "显示半径"],
+          showDiameter: [!0, "显示直径"],
+          showChord: [!0, "显示弦"],
+          showArc: [!0, "显示弧"],
+          showTangent: [!0, "显示切线"],
+          showCentralAngle: [!0, "显示圆心角"],
+          showLabels: [!0, "显示标签"]
+        }),
+        k = z(!1),
+        b = z(null),
+        I = z(3),
+        f = p(() => {
+          const n = (r.startAngle * Math.PI) / 180,
+            t = (r.endAngle * Math.PI) / 180;
+          return [
+            e.centerX + e.radius * Math.cos(n),
+            e.centerY + e.radius * Math.sin(n),
+            e.centerX + e.radius * Math.cos(t),
+            e.centerY + e.radius * Math.sin(t)
+          ];
+        }),
+        P = p(() => {
+          const t = (0 * Math.PI) / 180;
+          return [
+            e.centerX + e.radius * Math.cos(t),
+            e.centerY + e.radius * Math.sin(t),
+            e.centerX - e.radius * Math.cos(t),
+            e.centerY - e.radius * Math.sin(t)
+          ];
+        }),
+        C = p(() => {
+          const t = (60 * Math.PI) / 180;
+          return [
+            e.centerX,
+            e.centerY,
+            e.centerX + e.radius * Math.cos(t),
+            e.centerY + e.radius * Math.sin(t)
+          ];
+        }),
+        R = p(() => {
+          const n = (h.angle * Math.PI) / 180,
+            t = e.centerX + e.radius * Math.cos(n),
+            s = e.centerY + e.radius * Math.sin(n),
+            u = n + Math.PI / 2;
+          return [
+            t - h.length * Math.cos(u),
+            s - h.length * Math.sin(u),
+            t + h.length * Math.cos(u),
+            s + h.length * Math.sin(u)
+          ];
+        }),
+        A = p(() => {
+          const n = (h.angle * Math.PI) / 180;
+          return {
+            x: e.centerX + e.radius * Math.cos(n),
+            y: e.centerY + e.radius * Math.sin(n)
+          };
+        }),
+        S = p(() => {
+          let n = r.startAngle,
+            t = r.endAngle;
+          (n = -n), (t = -t);
+          const s = Math.abs(t - n) <= 180;
+          return {
+            innerRadius: e.radius - 5,
+            outerRadius: e.radius + 5,
+            startAngle: n,
+            endAngle: t,
+            isMinorArc: s,
+            sweep: s ? Math.abs(t - n) : 360 - Math.abs(t - n)
+          };
+        }),
+        W = p(() => {
+          let n = r.startAngle,
+            t = r.endAngle;
+          return (
+            (n = -n),
+            (t = -t),
+            {
+              innerRadius: 20,
+              outerRadius: 40,
+              startAngle: n,
+              endAngle: t,
+              angle: Math.abs(t - n)
+            }
+          );
+        }),
+        $ = n => {
+          e.radius = Math.max(50, Math.min(250, n));
+        },
+        q = () => {
+          (k.value = !k.value),
+            k.value
+              ? U()
+              : b.value && (cancelAnimationFrame(b.value), (b.value = null));
+        },
+        U = () => {
+          k.value &&
+            ((r.startAngle = (r.startAngle + 1) % 360),
+            (r.endAngle = (r.endAngle + 1.5) % 360),
+            (h.angle = (h.angle + 2) % 360),
+            (b.value = requestAnimationFrame(() => {
+              setTimeout(U, 1e3 / I.value);
+            })));
+        },
+        J = n => {
+          const t = n.target.getStage().getPointerPosition();
+          t && ((e.centerX = t.x), (e.centerY = t.y));
+        },
+        K = n => {
+          const t = u => {
+              const c = u.target.getStage().getPointerPosition();
+              if (!c) return;
+              const m = c.x - e.centerX,
+                x = c.y - e.centerY;
+              let v = Math.atan2(x, m) * (180 / Math.PI);
+              v < 0 && (v += 360), (r.startAngle = v);
+            },
+            s = () => {
+              n.target.off("dragmove", t), n.target.off("dragend", s);
+            };
+          n.target.on("dragmove", t), n.target.on("dragend", s);
+        },
+        O = n => {
+          const t = u => {
+              const c = u.target.getStage().getPointerPosition();
+              if (!c) return;
+              const m = c.x - e.centerX,
+                x = c.y - e.centerY;
+              let v = Math.atan2(x, m) * (180 / Math.PI);
+              v < 0 && (v += 360), (r.endAngle = v);
+            },
+            s = () => {
+              n.target.off("dragmove", t), n.target.off("dragend", s);
+            };
+          n.target.on("dragmove", t), n.target.on("dragend", s);
+        },
+        Q = n => {
+          const t = u => {
+              const c = u.target.getStage().getPointerPosition();
+              if (!c) return;
+              const m = c.x - e.centerX,
+                x = c.y - e.centerY;
+              let v = Math.atan2(x, m) * (180 / Math.PI);
+              v < 0 && (v += 360), (h.angle = v);
+            },
+            s = () => {
+              n.target.off("dragmove", t), n.target.off("dragend", s);
+            };
+          n.target.on("dragmove", t), n.target.on("dragend", s);
+        },
+        Z = () => {
+          const n = [];
+          for (let s = 0; s <= _; s += 50)
+            n.push({ points: [0, s, B, s], stroke: "#E5E7EB", strokeWidth: 1 });
+          for (let s = 0; s <= B; s += 50)
+            n.push({ points: [s, 0, s, _], stroke: "#E5E7EB", strokeWidth: 1 });
+          return n;
+        },
+        ee = () => {
+          const n = [];
+          for (let s = 0; s <= B; s += 50)
+            n.push({
+              x: s,
+              y: _ - 10,
+              text: ((s - L) / 50).toString(),
+              fontSize: 10,
+              fill: "#6B7280",
+              align: "center"
+            });
+          for (let s = 0; s <= _; s += 50)
+            n.push({
+              x: 10,
+              y: s,
+              text: ((N - s) / 50).toString(),
+              fontSize: 10,
+              fill: "#6B7280",
+              align: "left"
+            });
+          return n;
+        },
+        te = Z(),
+        ne = ee();
+      return (
+        re(() => () => {
+          b.value && cancelAnimationFrame(b.value);
+        }),
+        (n, t) => {
+          const s = M("v-line"),
+            u = M("v-text"),
+            c = M("v-circle"),
+            m = M("v-arc"),
+            x = M("v-layer"),
+            v = M("v-stage");
+          return (
+            l(),
+            Y("div", ue, [
+              a("main", ge, [
+                t[11] ||
+                  (t[11] = a(
+                    "h1",
+                    { class: "text-2xl font-bold mb-6 text-center" },
+                    " 初中圆的性质与概念演示 ",
+                    -1
+                  )),
+                a("div", ce, [
+                  a("div", he, [
+                    a("div", ve, [
+                      t[8] ||
+                        (t[8] = a(
+                          "h2",
+                          { class: "text-xl font-bold mb-4 flex items-center" },
+                          [
+                            a("i", {
+                              class: "fa fa-sliders text-primary mr-2"
+                            }),
+                            j(" 圆属性控制 ")
+                          ],
+                          -1
+                        )),
+                      a("div", fe, [
+                        a("div", null, [
+                          a("label", me, " 半径: " + y(e.radius) + "px ", 1),
+                          w(
+                            a(
+                              "input",
+                              {
+                                "onUpdate:modelValue":
+                                  t[0] || (t[0] = i => (e.radius = i)),
+                                type: "range",
+                                min: "50",
+                                max: "250",
+                                class:
+                                  "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500",
+                                onInput: t[1] || (t[1] = i => $(e.radius))
+                              },
+                              null,
+                              544
+                            ),
+                            [[E, e.radius, void 0, { number: !0 }]]
+                          )
+                        ]),
+                        a("div", xe, [
+                          a("div", null, [
+                            a(
+                              "label",
+                              pe,
+                              " 弦起点角度: " +
+                                y(Math.round(r.startAngle)) +
+                                "° ",
+                              1
+                            ),
+                            w(
+                              a(
+                                "input",
+                                {
+                                  "onUpdate:modelValue":
+                                    t[2] || (t[2] = i => (r.startAngle = i)),
+                                  type: "range",
+                                  min: "0",
+                                  max: "360",
+                                  class:
+                                    "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                                },
+                                null,
+                                512
+                              ),
+                              [[E, r.startAngle, void 0, { number: !0 }]]
+                            )
+                          ]),
+                          a("div", null, [
+                            a(
+                              "label",
+                              ye,
+                              " 弦终点角度: " +
+                                y(Math.round(r.endAngle)) +
+                                "° ",
+                              1
+                            ),
+                            w(
+                              a(
+                                "input",
+                                {
+                                  "onUpdate:modelValue":
+                                    t[3] || (t[3] = i => (r.endAngle = i)),
+                                  type: "range",
+                                  min: "0",
+                                  max: "360",
+                                  class:
+                                    "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                                },
+                                null,
+                                512
+                              ),
+                              [[E, r.endAngle, void 0, { number: !0 }]]
+                            )
+                          ])
+                        ]),
+                        a("div", null, [
+                          a("label", ke, " 切线角度: " + y(h.angle) + "° ", 1),
+                          w(
+                            a(
+                              "input",
+                              {
+                                "onUpdate:modelValue":
+                                  t[4] || (t[4] = i => (h.angle = i)),
+                                type: "range",
+                                min: "0",
+                                max: "360",
+                                class:
+                                  "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-red-500"
+                              },
+                              null,
+                              512
+                            ),
+                            [[E, h.angle, void 0, { number: !0 }]]
+                          )
+                        ]),
+                        a("div", be, [
+                          t[6] ||
+                            (t[6] = a(
+                              "h3",
+                              { class: "font-medium mb-3" },
+                              "动画控制",
+                              -1
+                            )),
+                          a(
+                            "button",
+                            {
+                              class: oe([
+                                "w-full py-2 px-4 rounded-lg transition-colors flex items-center justify-center",
+                                k.value
+                                  ? "bg-red-500 text-white"
+                                  : "bg-green-500 text-white"
+                              ]),
+                              onClick: q
+                            },
+                            y(k.value ? "暂停动画" : "开始动画"),
+                            3
+                          ),
+                          a("div", Ae, [
+                            a(
+                              "label",
+                              we,
+                              " 动画速度: " + y(I.value) + "x ",
+                              1
+                            ),
+                            w(
+                              a(
+                                "input",
+                                {
+                                  "onUpdate:modelValue":
+                                    t[5] || (t[5] = i => (I.value = i)),
+                                  type: "range",
+                                  min: "1",
+                                  max: "10",
+                                  class:
+                                    "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                                },
+                                null,
+                                512
+                              ),
+                              [[E, I.value, void 0, { number: !0 }]]
+                            )
+                          ])
+                        ]),
+                        a("div", Me, [
+                          t[7] ||
+                            (t[7] = a(
+                              "h3",
+                              { class: "font-medium mb-3" },
+                              "显示选项",
+                              -1
+                            )),
+                          a("div", _e, [
+                            (l(!0),
+                            Y(
+                              V,
+                              null,
+                              D(
+                                o,
+                                (i, X) => (
+                                  l(),
+                                  Y(
+                                    "label",
+                                    { key: X, class: "flex items-center" },
+                                    [
+                                      w(
+                                        a(
+                                          "input",
+                                          {
+                                            "onUpdate:modelValue": se =>
+                                              (i[0] = se),
+                                            type: "checkbox",
+                                            class:
+                                              "w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
+                                          },
+                                          null,
+                                          8,
+                                          Pe
+                                        ),
+                                        [[le, i[0]]]
+                                      ),
+                                      a("span", Ce, y(i[1]), 1)
+                                    ]
+                                  )
+                                )
+                              ),
+                              128
+                            ))
+                          ])
+                        ])
+                      ])
+                    ])
+                  ]),
+                  a("div", Re, [
+                    a("div", Se, [
+                      t[9] ||
+                        (t[9] = a(
+                          "div",
+                          { class: "flex justify-between items-center mb-4" },
+                          [
+                            a(
+                              "h2",
+                              { class: "text-xl font-bold flex items-center" },
+                              [
+                                a("i", {
+                                  class: "fa fa-circle-o text-primary mr-2"
+                                }),
+                                j(" 圆的基本元素与性质 ")
+                              ]
+                            ),
+                            a(
+                              "div",
+                              { class: "text-sm text-gray-500" },
+                              " 可拖动圆心、弦的端点和切点进行交互 "
+                            )
+                          ],
+                          -1
+                        )),
+                      T(
+                        v,
+                        {
+                          width: B,
+                          height: _,
+                          class: "border border-gray-200 rounded-lg bg-white"
+                        },
+                        {
+                          default: H(() => [
+                            T(x, null, {
+                              default: H(() => [
+                                (l(!0),
+                                Y(
+                                  V,
+                                  null,
+                                  D(
+                                    G(te),
+                                    (i, X) => (
+                                      l(),
+                                      d(
+                                        s,
+                                        {
+                                          key: "grid-" + X,
+                                          points: i.points,
+                                          stroke: i.stroke,
+                                          strokeWidth: i.strokeWidth
+                                        },
+                                        null,
+                                        8,
+                                        ["points", "stroke", "strokeWidth"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                (l(!0),
+                                Y(
+                                  V,
+                                  null,
+                                  D(
+                                    G(ne),
+                                    (i, X) => (
+                                      l(),
+                                      d(
+                                        u,
+                                        {
+                                          key: "label-" + X,
+                                          x: i.x,
+                                          y: i.y,
+                                          text: i.text,
+                                          fontSize: i.fontSize,
+                                          fill: i.fill,
+                                          align: i.align
+                                        },
+                                        null,
+                                        8,
+                                        [
+                                          "x",
+                                          "y",
+                                          "text",
+                                          "fontSize",
+                                          "fill",
+                                          "align"
+                                        ]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                T(
+                                  c,
+                                  {
+                                    x: e.centerX,
+                                    y: e.centerY,
+                                    radius: e.radius,
+                                    stroke: e.stroke,
+                                    strokeWidth: e.strokeWidth,
+                                    fill: e.fill
+                                  },
+                                  null,
+                                  8,
+                                  [
+                                    "x",
+                                    "y",
+                                    "radius",
+                                    "stroke",
+                                    "strokeWidth",
+                                    "fill"
+                                  ]
+                                ),
+                                o.showDiameter[0]
+                                  ? (l(),
+                                    d(
+                                      s,
+                                      {
+                                        key: 0,
+                                        points: P.value,
+                                        stroke: "#6366F1",
+                                        strokeWidth: 2,
+                                        dash: [5, 5]
+                                      },
+                                      null,
+                                      8,
+                                      ["points"]
+                                    ))
+                                  : g("", !0),
+                                o.showDiameter[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 1,
+                                        x: (P.value[0] + P.value[2]) / 2 + 10,
+                                        y: (P.value[1] + P.value[3]) / 2 - 10,
+                                        text: "直径",
+                                        fontSize: 12,
+                                        fill: "#6366F1"
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showRadius[0]
+                                  ? (l(),
+                                    d(
+                                      s,
+                                      {
+                                        key: 2,
+                                        points: C.value,
+                                        stroke: "#F59E0B",
+                                        strokeWidth: 2
+                                      },
+                                      null,
+                                      8,
+                                      ["points"]
+                                    ))
+                                  : g("", !0),
+                                o.showRadius[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 3,
+                                        x: (C.value[0] + C.value[2]) / 2 + 10,
+                                        y: (C.value[1] + C.value[3]) / 2 + 10,
+                                        text: "半径",
+                                        fontSize: 12,
+                                        fill: "#F59E0B"
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showChord[0]
+                                  ? (l(),
+                                    d(
+                                      s,
+                                      {
+                                        key: 4,
+                                        points: f.value,
+                                        stroke: r.stroke,
+                                        strokeWidth: r.strokeWidth
+                                      },
+                                      null,
+                                      8,
+                                      ["points", "stroke", "strokeWidth"]
+                                    ))
+                                  : g("", !0),
+                                o.showChord[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 5,
+                                        x: (f.value[0] + f.value[2]) / 2 + 10,
+                                        y: (f.value[1] + f.value[3]) / 2 - 10,
+                                        text: "弦",
+                                        fontSize: 12,
+                                        fill: r.stroke
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y", "fill"]
+                                    ))
+                                  : g("", !0),
+                                o.showArc[0]
+                                  ? (l(),
+                                    d(
+                                      m,
+                                      {
+                                        key: 6,
+                                        x: e.centerX,
+                                        y: e.centerY,
+                                        innerRadius: S.value.innerRadius,
+                                        outerRadius: S.value.outerRadius,
+                                        startAngle: S.value.startAngle,
+                                        endAngle: S.value.endAngle,
+                                        fill: "#10B981",
+                                        opacity: 0.3
+                                      },
+                                      null,
+                                      8,
+                                      [
+                                        "x",
+                                        "y",
+                                        "innerRadius",
+                                        "outerRadius",
+                                        "startAngle",
+                                        "endAngle"
+                                      ]
+                                    ))
+                                  : g("", !0),
+                                o.showArc[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 7,
+                                        x:
+                                          e.centerX +
+                                          Math.cos(
+                                            (((r.startAngle + r.endAngle) / 2) *
+                                              Math.PI) /
+                                              180
+                                          ) *
+                                            (e.radius + 20),
+                                        y:
+                                          e.centerY +
+                                          Math.sin(
+                                            (((r.startAngle + r.endAngle) / 2) *
+                                              Math.PI) /
+                                              180
+                                          ) *
+                                            (e.radius + 20),
+                                        text: S.value.isMinorArc
+                                          ? "劣弧"
+                                          : "优弧",
+                                        fontSize: 12,
+                                        fill: "#10B981"
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y", "text"]
+                                    ))
+                                  : g("", !0),
+                                o.showCentralAngle[0]
+                                  ? (l(),
+                                    d(
+                                      m,
+                                      {
+                                        key: 8,
+                                        x: e.centerX,
+                                        y: e.centerY,
+                                        innerRadius: W.value.innerRadius,
+                                        outerRadius: W.value.outerRadius,
+                                        startAngle: W.value.startAngle,
+                                        endAngle: W.value.endAngle,
+                                        fill: "#8B5CF6",
+                                        opacity: 0.5
+                                      },
+                                      null,
+                                      8,
+                                      [
+                                        "x",
+                                        "y",
+                                        "innerRadius",
+                                        "outerRadius",
+                                        "startAngle",
+                                        "endAngle"
+                                      ]
+                                    ))
+                                  : g("", !0),
+                                o.showCentralAngle[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 9,
+                                        x:
+                                          e.centerX +
+                                          50 *
+                                            Math.cos(
+                                              (((r.startAngle + r.endAngle) /
+                                                2) *
+                                                Math.PI) /
+                                                180
+                                            ),
+                                        y:
+                                          e.centerY +
+                                          50 *
+                                            Math.sin(
+                                              (((r.startAngle + r.endAngle) /
+                                                2) *
+                                                Math.PI) /
+                                                180
+                                            ),
+                                        text: `圆心角: ${Math.round(W.value.angle)}°`,
+                                        fontSize: 11,
+                                        fill: "#8B5CF6"
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y", "text"]
+                                    ))
+                                  : g("", !0),
+                                o.showTangent[0]
+                                  ? (l(),
+                                    d(
+                                      s,
+                                      {
+                                        key: 10,
+                                        points: R.value,
+                                        stroke: h.stroke,
+                                        strokeWidth: h.strokeWidth
+                                      },
+                                      null,
+                                      8,
+                                      ["points", "stroke", "strokeWidth"]
+                                    ))
+                                  : g("", !0),
+                                o.showTangent[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 11,
+                                        x: (R.value[0] + R.value[2]) / 2 + 10,
+                                        y: (R.value[1] + R.value[3]) / 2 - 10,
+                                        text: "切线",
+                                        fontSize: 12,
+                                        fill: h.stroke
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y", "fill"]
+                                    ))
+                                  : g("", !0),
+                                o.showTangent[0] && o.showRadius[0]
+                                  ? (l(),
+                                    d(
+                                      s,
+                                      {
+                                        key: 12,
+                                        points: [
+                                          e.centerX,
+                                          e.centerY,
+                                          A.value.x,
+                                          A.value.y
+                                        ],
+                                        stroke: "#EF4444",
+                                        strokeWidth: 1,
+                                        dash: [3, 3]
+                                      },
+                                      null,
+                                      8,
+                                      ["points"]
+                                    ))
+                                  : g("", !0),
+                                o.showCenter[0]
+                                  ? (l(),
+                                    d(
+                                      c,
+                                      {
+                                        key: 13,
+                                        x: e.centerX,
+                                        y: e.centerY,
+                                        radius: 6,
+                                        fill: "#3B82F6",
+                                        stroke: "white",
+                                        strokeWidth: 2,
+                                        draggable: "",
+                                        onDragmove: J
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showCenter[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 14,
+                                        x: e.centerX + 10,
+                                        y: e.centerY - 10,
+                                        text: "圆心",
+                                        fontSize: 12,
+                                        fill: "#3B82F6"
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showChord[0]
+                                  ? (l(),
+                                    d(
+                                      c,
+                                      {
+                                        key: 15,
+                                        x: f.value[0],
+                                        y: f.value[1],
+                                        radius: 5,
+                                        fill: "#10B981",
+                                        stroke: "white",
+                                        strokeWidth: 1,
+                                        draggable: "",
+                                        onDragmove: K
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showChord[0]
+                                  ? (l(),
+                                    d(
+                                      c,
+                                      {
+                                        key: 16,
+                                        x: f.value[2],
+                                        y: f.value[3],
+                                        radius: 5,
+                                        fill: "#10B981",
+                                        stroke: "white",
+                                        strokeWidth: 1,
+                                        draggable: "",
+                                        onDragmove: O
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showTangent[0]
+                                  ? (l(),
+                                    d(
+                                      c,
+                                      {
+                                        key: 17,
+                                        x: A.value.x,
+                                        y: A.value.y,
+                                        radius: 5,
+                                        fill: "#EF4444",
+                                        stroke: "white",
+                                        strokeWidth: 1,
+                                        draggable: "",
+                                        onDragmove: Q
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0),
+                                o.showTangent[0] && o.showLabels[0]
+                                  ? (l(),
+                                    d(
+                                      u,
+                                      {
+                                        key: 18,
+                                        x: A.value.x + 10,
+                                        y: A.value.y + 10,
+                                        text: "切点",
+                                        fontSize: 12,
+                                        fill: "#EF4444"
+                                      },
+                                      null,
+                                      8,
+                                      ["x", "y"]
+                                    ))
+                                  : g("", !0)
+                              ]),
+                              _: 1
+                            })
+                          ]),
+                          _: 1
+                        }
+                      ),
+                      t[10] ||
+                        (t[10] = ie(
+                          '<div class="mt-4 bg-blue-50 p-3 rounded-lg text-sm text-gray-700" data-v-07f840e8><h3 class="font-medium text-blue-700 mb-2" data-v-07f840e8>圆的基本概念:</h3><ul class="list-disc pl-5 space-y-1" data-v-07f840e8><li data-v-07f840e8><strong data-v-07f840e8>圆心</strong>: 圆的中心，到圆上任意一点的距离相等 </li><li data-v-07f840e8><strong data-v-07f840e8>半径</strong>: 连接圆心和圆上任意一点的线段</li><li data-v-07f840e8><strong data-v-07f840e8>直径</strong>: 通过圆心且两端都在圆上的线段，长度是半径的2倍 </li><li data-v-07f840e8><strong data-v-07f840e8>弦</strong>: 连接圆上任意两点的线段，直径是最长的弦 </li><li data-v-07f840e8><strong data-v-07f840e8>弧</strong>: 圆上任意两点间的部分，小于半圆的叫劣弧，大于半圆的叫优弧 </li><li data-v-07f840e8><strong data-v-07f840e8>切线</strong>: 与圆只有一个交点的直线，切线垂直于过切点的半径 </li><li data-v-07f840e8><strong data-v-07f840e8>圆心角</strong>: 顶点在圆心，两边为半径的角</li></ul></div>',
+                          1
+                        ))
+                    ])
+                  ])
+                ])
+              ]),
+              t[12] ||
+                (t[12] = a(
+                  "footer",
+                  { class: "mt-8 py-4 text-center text-gray-500 text-sm" },
+                  " 初中数学圆的性质交互式学习工具 | 拖动元素可交互探索 ",
+                  -1
+                ))
+            ])
+          );
+        }
+      );
+    }
+  }),
+  Ee = de(We, [["__scopeId", "data-v-07f840e8"]]);
+export { Ee as default };

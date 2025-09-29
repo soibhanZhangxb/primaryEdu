@@ -1,0 +1,100 @@
+import { useColumns as m } from "./columns-kTyF-Tmb.js";
+import {
+  d,
+  h as t,
+  b as p,
+  e as f,
+  w as s,
+  f as n,
+  j as o,
+  u as v,
+  g as r,
+  _ as b
+} from "./index-ifxKUhWa.js";
+const k = d({
+    name: "JInverse3",
+    __name: "jinverse",
+    setup(w) {
+      const { columns: a } = m();
+      return (x, e) => {
+        const l = t("el-link"),
+          u = t("el-button"),
+          c = t("el-result"),
+          _ = t("PureDescriptions"),
+          i = t("el-card");
+        return (
+          f(),
+          p(
+            i,
+            { shadow: "never" },
+            {
+              header: s(() => [
+                e[1] ||
+                  (e[1] = r(
+                    "div",
+                    { class: "card-header" },
+                    [r("span", { class: "font-medium" }, "失败页")],
+                    -1
+                  )),
+                n(
+                  l,
+                  {
+                    class: "mt-2",
+                    href: "https://github.com/pure-admin/vue-pure-admin/blob/main/src/views/result/fail.vue",
+                    target: "_blank"
+                  },
+                  {
+                    default: s(
+                      () =>
+                        e[0] ||
+                        (e[0] = [o(" 代码位置 src/views/result/fail.vue ")])
+                    ),
+                    _: 1,
+                    __: [0]
+                  }
+                )
+              ]),
+              default: s(() => [
+                n(
+                  c,
+                  {
+                    icon: "error",
+                    title: "提交失败",
+                    "sub-title": "请核对并修改以下信息后，再重新提交。"
+                  },
+                  {
+                    extra: s(() => [
+                      n(
+                        u,
+                        { type: "primary" },
+                        {
+                          default: s(() => e[2] || (e[2] = [o("返回修改")])),
+                          _: 1,
+                          __: [2]
+                        }
+                      )
+                    ]),
+                    _: 1
+                  }
+                ),
+                n(
+                  _,
+                  {
+                    columns: v(a),
+                    title: "您提交的内容有如下错误：",
+                    class: "p-6 w-[90%] m-auto bg-[#fafafa] dark:bg-[#1d1d1d]"
+                  },
+                  null,
+                  8,
+                  ["columns"]
+                )
+              ]),
+              _: 1
+            }
+          )
+        );
+      };
+    }
+  }),
+  h = b(k, [["__scopeId", "data-v-eeb7629c"]]);
+export { h as default };

@@ -1,0 +1,25 @@
+.sorting-demo-container[data-v-e1f48a8f] {
+  display: flex;
+  gap: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 20px;
+}
+.sorting-demo-container .control-panel[data-v-e1f48a8f] {
+  flex-shrink: 0;
+  width: 300px;
+}
+.sorting-demo-container .control-panel .card-header[data-v-e1f48a8f] {
+  font-size: 18px;
+  font-weight: 700;
+}
+.sorting-demo-container .canvas-container[data-v-e1f48a8f] {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  flex-grow: 1;
+  padding: 10px;
+}
+.sorting-demo-container[data-v-e1f48a8f] .el-form-item {
+  margin-bottom: 18px;
+}

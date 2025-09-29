@@ -1,0 +1,411 @@
+import { D as P } from "./dutils-0Z0zhYva.js";
+import { _ as B } from "./KTextWithBg.vue_vue_type_script_setup_true_lang-B6-_g51U.js";
+import z from "./DrawingTool-CRhKNQru.js";
+import {
+  d as $,
+  a as i,
+  p as R,
+  m as q,
+  k as _,
+  e as r,
+  g as t,
+  f as a,
+  w as p,
+  h as v,
+  F as y,
+  l as w,
+  b as h,
+  u as S,
+  t as j,
+  j as A,
+  _ as J
+} from "./index-ifxKUhWa.js";
+const K = {
+    class: "flex flex-col md:flex-row gap-6 p-4 bg-gray-50 shadow mkonva"
+  },
+  X = { class: "flex-1" },
+  Y = { class: "border rounded-lg overflow-hidden bg-white" },
+  O = { class: "p-2 flex justify-between items-center border-left-blue" },
+  Q = { class: "flex gap-2" },
+  Z = { class: "relative" },
+  ee = { class: "w-full md:w-80 space-y-6" },
+  te = { class: "bg-white p-4 rounded-lg shadow border-left-blue" },
+  se = { class: "space-y-3" },
+  oe = { class: "flex items-center justify-between h-full" },
+  le = { class: "text-xl font-mono font-bold text-blue-600" },
+  ne = { class: "flex items-center justify-between h-full" },
+  ae = { class: "text-lg font-mono" },
+  ie = { class: "bg-white p-4 rounded-lg shadow" },
+  re = { class: "space-y-4" },
+  ue = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  de = { class: "bg-white p-4 rounded-lg shadow" },
+  fe = { class: "space-y-2" },
+  x = 40,
+  ce = $({
+    name: "JInverse",
+    __name: "jinverse",
+    setup(me) {
+      let g = 940,
+        b = 580,
+        l = { x: g / 2, y: b / 2 };
+      const k = i({ lines: [], labels: [] }),
+        u = i(1),
+        L = i(!0),
+        G = i(!0),
+        V = i(!0),
+        M = i(!1),
+        D = i({ x: 0, y: 0 }),
+        C = i(null),
+        N = i(null),
+        U = R(() => `y = ${u.value}/x`),
+        F = R(() =>
+          !V.value || !L.value
+            ? []
+            : [
+                {
+                  points: [0, l.y, g, l.y],
+                  stroke: "#ff6b6b",
+                  strokeWidth: 2,
+                  dash: [5, 5]
+                },
+                {
+                  points: [l.x, 0, l.x, b],
+                  stroke: "#ff6b6b",
+                  strokeWidth: 2,
+                  dash: [5, 5]
+                }
+              ]
+        ),
+        I = R(() => {
+          if (!L.value) return null;
+          const n = [[], []],
+            e = 0.1,
+            f = l.x / x,
+            d = l.y / x;
+          for (let o = e; o <= f; o += e) {
+            const c = u.value / o;
+            Math.abs(c) > d + 5 ||
+              (n[0].push(l.x + o * x), n[0].push(l.y - c * x));
+          }
+          for (let o = -e; o >= -f; o -= e) {
+            const c = u.value / o;
+            Math.abs(c) > d + 5 ||
+              (n[1].push(l.x + o * x), n[1].push(l.y - c * x));
+          }
+          return [
+            { points: n[0], stroke: "#3a7bd5", strokeWidth: 3, tension: 0.5 },
+            { points: n[1], stroke: "#3a7bd5", strokeWidth: 3, tension: 0.5 }
+          ];
+        }),
+        T = () => {
+          u.value = 1;
+        };
+      return (
+        q(() => {
+          var e;
+          k.value = P.drawGrid(g, b, l, x);
+          const n = (e = C.value) == null ? void 0 : e.getStage();
+          n &&
+            n.on("mousemove", f => {
+              const d = n.getPointerPosition();
+              d && (D.value = { x: Math.round(d.x), y: Math.round(d.y) });
+            });
+        }),
+        (n, e) => {
+          const f = v("v-line"),
+            d = v("v-text"),
+            o = v("v-layer"),
+            c = v("v-stage"),
+            E = v("el-slider"),
+            H = v("el-button"),
+            W = v("el-checkbox");
+          return (
+            r(),
+            _("div", K, [
+              t("div", X, [
+                t("div", Y, [
+                  t("div", null, [
+                    t("div", O, [
+                      e[4] ||
+                        (e[4] = t(
+                          "div",
+                          {
+                            class: "text-sm font-medium text-gray-700 bg-gray"
+                          },
+                          " 探索反比例函数 y = k/x 的图像变化规律 ",
+                          -1
+                        )),
+                      t("div", Q, [
+                        a(
+                          z,
+                          {
+                            enableDrawing: M.value,
+                            "onUpdate:enableDrawing":
+                              e[0] || (e[0] = s => (M.value = s)),
+                            stageRef: C.value,
+                            drawingLayerRef: N.value
+                          },
+                          null,
+                          8,
+                          ["enableDrawing", "stageRef", "drawingLayerRef"]
+                        )
+                      ])
+                    ]),
+                    t("div", Z, [
+                      a(
+                        c,
+                        {
+                          ref_key: "stageRef",
+                          ref: C,
+                          config: { width: S(g), height: S(b) }
+                        },
+                        {
+                          default: p(() => [
+                            a(o, null, {
+                              default: p(() => [
+                                (r(!0),
+                                _(
+                                  y,
+                                  null,
+                                  w(
+                                    k.value.lines,
+                                    (s, m) => (
+                                      r(),
+                                      h(
+                                        f,
+                                        { key: "grid-" + m, config: s },
+                                        null,
+                                        8,
+                                        ["config"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                (r(!0),
+                                _(
+                                  y,
+                                  null,
+                                  w(
+                                    k.value.labels,
+                                    (s, m) => (
+                                      r(),
+                                      h(
+                                        d,
+                                        { key: "axe-label-" + m, config: s },
+                                        null,
+                                        8,
+                                        ["config"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                (r(!0),
+                                _(
+                                  y,
+                                  null,
+                                  w(
+                                    F.value,
+                                    (s, m) => (
+                                      r(),
+                                      h(
+                                        f,
+                                        { key: "asymptote-" + m, config: s },
+                                        null,
+                                        8,
+                                        ["config"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                (r(!0),
+                                _(
+                                  y,
+                                  null,
+                                  w(
+                                    I.value,
+                                    (s, m) => (
+                                      r(),
+                                      h(f, { key: m, config: s }, null, 8, [
+                                        "config"
+                                      ])
+                                    )
+                                  ),
+                                  128
+                                )),
+                                a(
+                                  B,
+                                  {
+                                    text: U.value,
+                                    x: S(g) - 200,
+                                    y: 2,
+                                    fontSize: 16,
+                                    "bg-color": "#3a7bd5bb",
+                                    "text-color": "white",
+                                    "corner-radius": 8
+                                  },
+                                  null,
+                                  8,
+                                  ["text", "x"]
+                                ),
+                                a(
+                                  B,
+                                  {
+                                    text:
+                                      "坐标: ( " +
+                                      D.value.x +
+                                      ", " +
+                                      D.value.y +
+                                      " )",
+                                    x: 2,
+                                    y: 10,
+                                    fontSize: 16,
+                                    "bg-color": "#333333bb",
+                                    "text-color": "white",
+                                    "corner-radius": 8
+                                  },
+                                  null,
+                                  8,
+                                  ["text"]
+                                )
+                              ]),
+                              _: 1
+                            }),
+                            a(
+                              o,
+                              { ref_key: "drawingLayerRef", ref: N },
+                              null,
+                              512
+                            )
+                          ]),
+                          _: 1
+                        },
+                        8,
+                        ["config"]
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              t("div", ee, [
+                t("div", te, [
+                  e[7] ||
+                    (e[7] = t(
+                      "h3",
+                      { class: "text-lg font-semibold mb-4 text-gray-800" },
+                      "方程信息:",
+                      -1
+                    )),
+                  t("div", se, [
+                    t("div", oe, [
+                      e[5] ||
+                        (e[5] = t(
+                          "p",
+                          { class: "text-sm text-gray-600" },
+                          "标准形式",
+                          -1
+                        )),
+                      t("p", le, j(U.value), 1)
+                    ]),
+                    t("div", ne, [
+                      e[6] ||
+                        (e[6] = t(
+                          "p",
+                          { class: "text-sm text-gray-600" },
+                          "比例系数 K",
+                          -1
+                        )),
+                      t("p", ae, j(u.value.toFixed(2)), 1)
+                    ])
+                  ])
+                ]),
+                t("div", ie, [
+                  e[9] ||
+                    (e[9] = t(
+                      "h3",
+                      { class: "text-lg font-semibold mb-4 text-gray-800" },
+                      "参数控制",
+                      -1
+                    )),
+                  t("div", re, [
+                    t("div", null, [
+                      t("label", ue, " 比例系数k: " + j(u.value.toFixed(2)), 1),
+                      a(
+                        E,
+                        {
+                          modelValue: u.value,
+                          "onUpdate:modelValue":
+                            e[1] || (e[1] = s => (u.value = s)),
+                          min: -10,
+                          max: 10,
+                          step: 0.1,
+                          "show-input": ""
+                        },
+                        null,
+                        8,
+                        ["modelValue"]
+                      )
+                    ]),
+                    a(
+                      H,
+                      { type: "info", class: "w-full", onClick: T },
+                      {
+                        default: p(() => e[8] || (e[8] = [A(" 重置 ")])),
+                        _: 1,
+                        __: [8]
+                      }
+                    )
+                  ])
+                ]),
+                t("div", de, [
+                  e[12] ||
+                    (e[12] = t(
+                      "h3",
+                      { class: "text-lg font-semibold mb-4 text-gray-800" },
+                      "显示选项",
+                      -1
+                    )),
+                  t("div", fe, [
+                    a(
+                      W,
+                      {
+                        modelValue: G.value,
+                        "onUpdate:modelValue":
+                          e[2] || (e[2] = s => (G.value = s))
+                      },
+                      {
+                        default: p(() => e[10] || (e[10] = [A("显示网格")])),
+                        _: 1,
+                        __: [10]
+                      },
+                      8,
+                      ["modelValue"]
+                    ),
+                    a(
+                      W,
+                      {
+                        modelValue: V.value,
+                        "onUpdate:modelValue":
+                          e[3] || (e[3] = s => (V.value = s))
+                      },
+                      {
+                        default: p(() => e[11] || (e[11] = [A("显示渐近线")])),
+                        _: 1,
+                        __: [11]
+                      },
+                      8,
+                      ["modelValue"]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          );
+        }
+      );
+    }
+  }),
+  pe = J(ce, [["__scopeId", "data-v-b667522d"]]);
+export { pe as default };

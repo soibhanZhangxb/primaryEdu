@@ -1,0 +1,13 @@
+[data-v-07f840e8]:root {
+  --primary: #3b82f6;
+  --light: #f9fafb;
+  --dark: #1f2937;
+}
+.card-shadow[data-v-07f840e8] {
+  box-shadow:
+    0 4px 6px -1px #0000001a,
+    0 2px 4px -1px #0000000f;
+}
+label[data-v-07f840e8] {
+  font-weight: 400;
+}

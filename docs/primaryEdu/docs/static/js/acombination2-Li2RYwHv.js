@@ -1,0 +1,979 @@
+import { D as ge } from "./delete-DeDT0XGg.js";
+import { E as he } from "./edit-pen-D184Bsbv.js";
+import { A as be } from "./add-circle-line-CJowuUrw.js";
+import { R as xe } from "./refresh-C_XcZq6o.js";
+import {
+  _ as ye,
+  a as m,
+  m as ke,
+  n as Ce,
+  h as u,
+  k as b,
+  e as v,
+  f as t,
+  w as a,
+  g as i,
+  i as P,
+  t as d,
+  j as y,
+  u as N,
+  F as B,
+  l as U,
+  b as L
+} from "./index-ifxKUhWa.js";
+const we = { class: "permutation-combination-app" },
+  Ee = { class: "slider-value" },
+  Ve = { class: "slider-value" },
+  Re = { class: "control-buttons" },
+  Se = { class: "result-info" },
+  Fe = { key: 0 },
+  ze = { key: 1 },
+  De = { class: "result-value" },
+  Pe = { key: 0, class: "manual-selection" },
+  Ae = { class: "elements-container" },
+  We = { class: "result-container" },
+  Ie = { class: "section-title" },
+  Ne = { class: "demo-hint" },
+  Be = { key: 0 },
+  Ue = { key: 1 },
+  Le = { key: 2 },
+  V = 25,
+  Z = 200,
+  Me = 200,
+  Te = {
+    __name: "acombination2",
+    setup($e) {
+      const A = m({ width: 800, height: Z }),
+        C = m({ width: 800, height: Me }),
+        o = m(5),
+        n = m(2),
+        w = m("permutation"),
+        M = m(1e3),
+        c = m(!1),
+        f = m(!1),
+        R = m(0),
+        W = m(0),
+        k = m([]),
+        z = m([]),
+        S = m([]),
+        E = m([]),
+        T = () => {
+          const l = [],
+            _ = (A.value.width - V * 2) / (o.value - 1);
+          for (let s = 0; s < o.value; s++)
+            l.push({
+              index: s,
+              label: String.fromCharCode(65 + s),
+              x: V + s * _,
+              y: Z / 2,
+              selected: !1
+            });
+          (k.value = l), (E.value = []);
+        },
+        ee = () => {
+          n.value > o.value && (n.value = o.value), H();
+        },
+        le = () => {
+          n.value > o.value && (n.value = o.value), T(), I();
+        },
+        D = l => (l <= 1 ? 1 : l * D(l - 1)),
+        te = (l, e) => (e > l ? 0 : D(l) / D(l - e)),
+        ae = (l, e) => (e > l ? 0 : D(l) / (D(e) * D(l - e))),
+        ne = (l, e) => {
+          const _ = [],
+            s = (x, p) => {
+              if (x.length === e) {
+                _.push([...x]);
+                return;
+              }
+              for (let g = 0; g < p.length; g++) {
+                const j = [...x, p[g]],
+                  F = [...p.slice(0, g), ...p.slice(g + 1)];
+                s(j, F);
+              }
+            };
+          return s([], l), _;
+        },
+        oe = (l, e) => {
+          const _ = [],
+            s = (x, p) => {
+              if (p.length === e) {
+                _.push([...p]);
+                return;
+              }
+              for (let g = x; g < l.length; g++)
+                p.push(l[g]), s(g + 1, p), p.pop();
+            };
+          return s(0, []), _;
+        },
+        I = () => {
+          const l = k.value.map(e => ({ index: e.index, label: e.label }));
+          w.value === "permutation"
+            ? ((z.value = ne(l, n.value)), (W.value = te(o.value, n.value)))
+            : ((z.value = oe(l, n.value)), (W.value = ae(o.value, n.value))),
+            (R.value = 0),
+            (S.value = z.value[0] || []);
+        },
+        se = l => {
+          const e = k.value[l];
+          return c.value && !f.value
+            ? S.value.some(s => s.index === l)
+              ? "#F56C6C"
+              : "#409EFF"
+            : e.selected
+              ? "#67C23A"
+              : "#409EFF";
+        },
+        ue = l => "#F56C6C",
+        ie = l => {
+          if (c.value) return;
+          const e = k.value[l];
+          if (e.selected) {
+            e.selected = !1;
+            const _ = E.value.findIndex(s => s.index === l);
+            _ !== -1 && E.value.splice(_, 1);
+          } else
+            E.value.length < n.value &&
+              ((e.selected = !0),
+              E.value.push({ index: e.index, label: e.label }));
+          k.value = [...k.value];
+        },
+        re = () => {
+          S.value = [...E.value];
+        },
+        de = () => {
+          (c.value && !f.value) ||
+            ((c.value = !0),
+            (f.value = !1),
+            (R.value = 0),
+            (S.value = z.value[0] || []),
+            $());
+        },
+        $ = () => {
+          !c.value ||
+            f.value ||
+            (R.value < z.value.length - 1
+              ? (R.value++,
+                (S.value = z.value[R.value]),
+                setTimeout($, M.value))
+              : (c.value = !1));
+        },
+        ce = () => {
+          c.value && !f.value && (f.value = !0);
+        },
+        ve = () => {
+          c.value && f.value && ((f.value = !1), $());
+        },
+        H = () => {
+          (c.value = !1),
+            (f.value = !1),
+            (R.value = 0),
+            I(),
+            k.value.forEach(l => {
+              l.selected = !1;
+            }),
+            (E.value = []);
+        };
+      return (
+        ke(() => {
+          T(), I();
+          const l = () => {
+            const e = window.innerWidth - 400;
+            e > 500 && ((A.value.width = e), (C.value.width = e), T());
+          };
+          return (
+            window.addEventListener("resize", l),
+            () => window.removeEventListener("resize", l)
+          );
+        }),
+        Ce([o, n, w], () => {
+          I();
+        }),
+        (l, e) => {
+          const _ = u("el-header"),
+            s = u("el-slider"),
+            x = u("el-form-item"),
+            p = u("el-radio"),
+            g = u("el-radio-group"),
+            j = u("el-form"),
+            F = u("el-button"),
+            q = u("el-descriptions-item"),
+            me = u("el-descriptions"),
+            G = u("el-card"),
+            fe = u("el-aside"),
+            J = u("v-rect"),
+            K = u("v-circle"),
+            O = u("v-text"),
+            Q = u("v-layer"),
+            X = u("v-stage"),
+            _e = u("el-main"),
+            Y = u("el-container"),
+            pe = u("el-footer");
+          return (
+            v(),
+            b("div", we, [
+              t(Y, null, {
+                default: a(() => [
+                  t(
+                    _,
+                    { class: "app-header" },
+                    {
+                      default: a(
+                        () =>
+                          e[4] ||
+                          (e[4] = [
+                            i(
+                              "div",
+                              { class: "header-content" },
+                              [
+                                i("h1", null, "数学排列组合演示工具"),
+                                i(
+                                  "p",
+                                  null,
+                                  "可视化展示排列与组合的概念和计算过程"
+                                )
+                              ],
+                              -1
+                            )
+                          ])
+                      ),
+                      _: 1,
+                      __: [4]
+                    }
+                  ),
+                  t(
+                    Y,
+                    { class: "main-container" },
+                    {
+                      default: a(() => [
+                        t(
+                          fe,
+                          { width: "300px", class: "control-panel" },
+                          {
+                            default: a(() => [
+                              t(
+                                G,
+                                { title: "控制面板", class: "control-card" },
+                                {
+                                  default: a(() => [
+                                    t(
+                                      j,
+                                      {
+                                        "label-width": "100px",
+                                        class: "setting-form"
+                                      },
+                                      {
+                                        default: a(() => [
+                                          t(
+                                            x,
+                                            { label: "总元素数(n)" },
+                                            {
+                                              default: a(() => [
+                                                t(
+                                                  s,
+                                                  {
+                                                    modelValue: o.value,
+                                                    "onUpdate:modelValue":
+                                                      e[0] ||
+                                                      (e[0] = r =>
+                                                        (o.value = r)),
+                                                    min: 2,
+                                                    max: 10,
+                                                    step: 1,
+                                                    onChange: le
+                                                  },
+                                                  null,
+                                                  8,
+                                                  ["modelValue"]
+                                                ),
+                                                i("span", Ee, d(o.value), 1)
+                                              ]),
+                                              _: 1
+                                            }
+                                          ),
+                                          t(
+                                            x,
+                                            { label: "选取元素数(k)" },
+                                            {
+                                              default: a(() => [
+                                                t(
+                                                  s,
+                                                  {
+                                                    modelValue: n.value,
+                                                    "onUpdate:modelValue":
+                                                      e[1] ||
+                                                      (e[1] = r =>
+                                                        (n.value = r)),
+                                                    min: 1,
+                                                    max: Math.min(o.value, 6),
+                                                    step: 1,
+                                                    onChange: ee
+                                                  },
+                                                  null,
+                                                  8,
+                                                  ["modelValue", "max"]
+                                                ),
+                                                i("span", Ve, d(n.value), 1)
+                                              ]),
+                                              _: 1
+                                            }
+                                          ),
+                                          t(
+                                            x,
+                                            { label: "演示类型" },
+                                            {
+                                              default: a(() => [
+                                                t(
+                                                  g,
+                                                  {
+                                                    modelValue: w.value,
+                                                    "onUpdate:modelValue":
+                                                      e[2] ||
+                                                      (e[2] = r =>
+                                                        (w.value = r)),
+                                                    onChange: H
+                                                  },
+                                                  {
+                                                    default: a(() => [
+                                                      t(
+                                                        p,
+                                                        {
+                                                          label: "permutation"
+                                                        },
+                                                        {
+                                                          default: a(
+                                                            () =>
+                                                              e[5] ||
+                                                              (e[5] = [
+                                                                y(
+                                                                  "排列 (P(n,k))"
+                                                                )
+                                                              ])
+                                                          ),
+                                                          _: 1,
+                                                          __: [5]
+                                                        }
+                                                      ),
+                                                      t(
+                                                        p,
+                                                        {
+                                                          label: "combination"
+                                                        },
+                                                        {
+                                                          default: a(
+                                                            () =>
+                                                              e[6] ||
+                                                              (e[6] = [
+                                                                y(
+                                                                  "组合 (C(n,k))"
+                                                                )
+                                                              ])
+                                                          ),
+                                                          _: 1,
+                                                          __: [6]
+                                                        }
+                                                      )
+                                                    ]),
+                                                    _: 1
+                                                  },
+                                                  8,
+                                                  ["modelValue"]
+                                                )
+                                              ]),
+                                              _: 1
+                                            }
+                                          ),
+                                          t(
+                                            x,
+                                            { label: "动画速度" },
+                                            {
+                                              default: a(() => [
+                                                t(
+                                                  s,
+                                                  {
+                                                    modelValue: M.value,
+                                                    "onUpdate:modelValue":
+                                                      e[3] ||
+                                                      (e[3] = r =>
+                                                        (M.value = r)),
+                                                    min: 300,
+                                                    max: 2e3,
+                                                    step: 100,
+                                                    reverse: !0
+                                                  },
+                                                  null,
+                                                  8,
+                                                  ["modelValue"]
+                                                )
+                                              ]),
+                                              _: 1
+                                            }
+                                          )
+                                        ]),
+                                        _: 1
+                                      }
+                                    ),
+                                    i("div", Re, [
+                                      t(
+                                        F,
+                                        {
+                                          type: "success",
+                                          icon: N(ge),
+                                          disabled: c.value,
+                                          class: "control-btn",
+                                          onClick: de
+                                        },
+                                        {
+                                          default: a(
+                                            () =>
+                                              e[7] || (e[7] = [y(" 开始演示 ")])
+                                          ),
+                                          _: 1,
+                                          __: [7]
+                                        },
+                                        8,
+                                        ["icon", "disabled"]
+                                      ),
+                                      t(
+                                        F,
+                                        {
+                                          type: "warning",
+                                          icon: N(he),
+                                          disabled: !c.value || f.value,
+                                          class: "control-btn",
+                                          onClick: ce
+                                        },
+                                        {
+                                          default: a(
+                                            () => e[8] || (e[8] = [y(" 暂停 ")])
+                                          ),
+                                          _: 1,
+                                          __: [8]
+                                        },
+                                        8,
+                                        ["icon", "disabled"]
+                                      ),
+                                      t(
+                                        F,
+                                        {
+                                          type: "primary",
+                                          icon: N(be),
+                                          disabled: !c.value || !f.value,
+                                          class: "control-btn",
+                                          onClick: ve
+                                        },
+                                        {
+                                          default: a(
+                                            () => e[9] || (e[9] = [y(" 继续 ")])
+                                          ),
+                                          _: 1,
+                                          __: [9]
+                                        },
+                                        8,
+                                        ["icon", "disabled"]
+                                      ),
+                                      t(
+                                        F,
+                                        {
+                                          type: "danger",
+                                          icon: N(xe),
+                                          class: "control-btn",
+                                          onClick: H
+                                        },
+                                        {
+                                          default: a(
+                                            () =>
+                                              e[10] || (e[10] = [y(" 重置 ")])
+                                          ),
+                                          _: 1,
+                                          __: [10]
+                                        },
+                                        8,
+                                        ["icon"]
+                                      )
+                                    ]),
+                                    i("div", Se, [
+                                      t(
+                                        me,
+                                        { column: "1", border: "" },
+                                        {
+                                          default: a(() => [
+                                            t(
+                                              q,
+                                              { label: "计算公式" },
+                                              {
+                                                default: a(() => [
+                                                  w.value === "permutation"
+                                                    ? (v(),
+                                                      b(
+                                                        "span",
+                                                        Fe,
+                                                        " P(" +
+                                                          d(o.value) +
+                                                          ", " +
+                                                          d(n.value) +
+                                                          ") = " +
+                                                          d(o.value) +
+                                                          "! / (" +
+                                                          d(o.value) +
+                                                          " - " +
+                                                          d(n.value) +
+                                                          ")! ",
+                                                        1
+                                                      ))
+                                                    : P("", !0),
+                                                  w.value === "combination"
+                                                    ? (v(),
+                                                      b(
+                                                        "span",
+                                                        ze,
+                                                        " C(" +
+                                                          d(o.value) +
+                                                          ", " +
+                                                          d(n.value) +
+                                                          ") = " +
+                                                          d(o.value) +
+                                                          "! / (" +
+                                                          d(n.value) +
+                                                          "! × (" +
+                                                          d(o.value) +
+                                                          " - " +
+                                                          d(n.value) +
+                                                          ")!) ",
+                                                        1
+                                                      ))
+                                                    : P("", !0)
+                                                ]),
+                                                _: 1
+                                              }
+                                            ),
+                                            t(
+                                              q,
+                                              { label: "结果" },
+                                              {
+                                                default: a(() => [
+                                                  i("span", De, d(W.value), 1)
+                                                ]),
+                                                _: 1
+                                              }
+                                            ),
+                                            t(
+                                              q,
+                                              { label: "当前展示" },
+                                              {
+                                                default: a(() => [
+                                                  i(
+                                                    "span",
+                                                    null,
+                                                    d(R.value + 1) +
+                                                      " / " +
+                                                      d(W.value),
+                                                    1
+                                                  )
+                                                ]),
+                                                _: 1
+                                              }
+                                            )
+                                          ]),
+                                          _: 1
+                                        }
+                                      )
+                                    ]),
+                                    c.value
+                                      ? P("", !0)
+                                      : (v(),
+                                        b("div", Pe, [
+                                          t(
+                                            G,
+                                            {
+                                              title: "手动选择",
+                                              class: "manual-card"
+                                            },
+                                            {
+                                              default: a(() => [
+                                                e[12] ||
+                                                  (e[12] = i(
+                                                    "p",
+                                                    { class: "manual-hint" },
+                                                    "点击元素进行选择/取消选择",
+                                                    -1
+                                                  )),
+                                                t(
+                                                  F,
+                                                  {
+                                                    type: "info",
+                                                    disabled:
+                                                      E.value.length !==
+                                                      n.value,
+                                                    class: "manual-btn",
+                                                    onClick: re
+                                                  },
+                                                  {
+                                                    default: a(
+                                                      () =>
+                                                        e[11] ||
+                                                        (e[11] = [
+                                                          y(" 查看结果 ")
+                                                        ])
+                                                    ),
+                                                    _: 1,
+                                                    __: [11]
+                                                  },
+                                                  8,
+                                                  ["disabled"]
+                                                )
+                                              ]),
+                                              _: 1,
+                                              __: [12]
+                                            }
+                                          )
+                                        ]))
+                                  ]),
+                                  _: 1
+                                }
+                              )
+                            ]),
+                            _: 1
+                          }
+                        ),
+                        t(
+                          _e,
+                          { class: "demo-container" },
+                          {
+                            default: a(() => [
+                              t(
+                                G,
+                                { class: "demo-card" },
+                                {
+                                  default: a(() => [
+                                    i("div", Ae, [
+                                      e[13] ||
+                                        (e[13] = i(
+                                          "h3",
+                                          { class: "section-title" },
+                                          "全部元素",
+                                          -1
+                                        )),
+                                      t(
+                                        X,
+                                        {
+                                          config: A.value,
+                                          class: "konva-stage elements-stage"
+                                        },
+                                        {
+                                          default: a(() => [
+                                            t(Q, null, {
+                                              default: a(() => [
+                                                t(
+                                                  J,
+                                                  {
+                                                    config: {
+                                                      x: 0,
+                                                      y: 0,
+                                                      width: A.value.width,
+                                                      height: A.value.height,
+                                                      fill: "#f9f9f9",
+                                                      cornerRadius: 4
+                                                    }
+                                                  },
+                                                  null,
+                                                  8,
+                                                  ["config"]
+                                                ),
+                                                (v(!0),
+                                                b(
+                                                  B,
+                                                  null,
+                                                  U(
+                                                    k.value,
+                                                    (r, h) => (
+                                                      v(),
+                                                      L(
+                                                        K,
+                                                        {
+                                                          key: h,
+                                                          config: {
+                                                            x: r.x,
+                                                            y: r.y,
+                                                            radius: V,
+                                                            fill: se(h),
+                                                            stroke: "#333",
+                                                            strokeWidth: 2,
+                                                            draggable: !c.value
+                                                          },
+                                                          onClick: He => ie(h)
+                                                        },
+                                                        null,
+                                                        8,
+                                                        ["config", "onClick"]
+                                                      )
+                                                    )
+                                                  ),
+                                                  128
+                                                )),
+                                                (v(!0),
+                                                b(
+                                                  B,
+                                                  null,
+                                                  U(
+                                                    k.value,
+                                                    (r, h) => (
+                                                      v(),
+                                                      L(
+                                                        O,
+                                                        {
+                                                          key: `text-${h}`,
+                                                          config: {
+                                                            x: r.x,
+                                                            y: r.y,
+                                                            text: r.label,
+                                                            fontSize: 16,
+                                                            fill: "#333",
+                                                            align: "center",
+                                                            verticalAlign:
+                                                              "middle"
+                                                          }
+                                                        },
+                                                        null,
+                                                        8,
+                                                        ["config"]
+                                                      )
+                                                    )
+                                                  ),
+                                                  128
+                                                ))
+                                              ]),
+                                              _: 1
+                                            })
+                                          ]),
+                                          _: 1
+                                        },
+                                        8,
+                                        ["config"]
+                                      )
+                                    ]),
+                                    i("div", We, [
+                                      i(
+                                        "h3",
+                                        Ie,
+                                        d(
+                                          w.value === "permutation"
+                                            ? "排列结果"
+                                            : "组合结果"
+                                        ),
+                                        1
+                                      ),
+                                      t(
+                                        X,
+                                        {
+                                          config: C.value,
+                                          class: "konva-stage result-stage"
+                                        },
+                                        {
+                                          default: a(() => [
+                                            t(Q, null, {
+                                              default: a(() => [
+                                                t(
+                                                  J,
+                                                  {
+                                                    config: {
+                                                      x: 0,
+                                                      y: 0,
+                                                      width: C.value.width,
+                                                      height: C.value.height,
+                                                      fill: "#f9f9f9",
+                                                      cornerRadius: 4
+                                                    }
+                                                  },
+                                                  null,
+                                                  8,
+                                                  ["config"]
+                                                ),
+                                                (v(!0),
+                                                b(
+                                                  B,
+                                                  null,
+                                                  U(
+                                                    S.value,
+                                                    (r, h) => (
+                                                      v(),
+                                                      L(
+                                                        K,
+                                                        {
+                                                          key: h,
+                                                          config: {
+                                                            x:
+                                                              C.value.width /
+                                                                2 -
+                                                              (n.value *
+                                                                (V * 2 + 10) -
+                                                                10) /
+                                                                2 +
+                                                              h * (V * 2 + 10),
+                                                            y:
+                                                              C.value.height /
+                                                              2,
+                                                            radius: V,
+                                                            fill: ue(r.index),
+                                                            stroke: "#333",
+                                                            strokeWidth: 2
+                                                          }
+                                                        },
+                                                        null,
+                                                        8,
+                                                        ["config"]
+                                                      )
+                                                    )
+                                                  ),
+                                                  128
+                                                )),
+                                                (v(!0),
+                                                b(
+                                                  B,
+                                                  null,
+                                                  U(
+                                                    S.value,
+                                                    (r, h) => (
+                                                      v(),
+                                                      L(
+                                                        O,
+                                                        {
+                                                          key: `result-text-${h}`,
+                                                          config: {
+                                                            x:
+                                                              C.value.width /
+                                                                2 -
+                                                              (n.value *
+                                                                (V * 2 + 10) -
+                                                                10) /
+                                                                2 +
+                                                              h * (V * 2 + 10),
+                                                            y:
+                                                              C.value.height /
+                                                              2,
+                                                            text: r.label,
+                                                            fontSize: 16,
+                                                            fill: "#333",
+                                                            align: "center",
+                                                            verticalAlign:
+                                                              "middle"
+                                                          }
+                                                        },
+                                                        null,
+                                                        8,
+                                                        ["config"]
+                                                      )
+                                                    )
+                                                  ),
+                                                  128
+                                                ))
+                                              ]),
+                                              _: 1
+                                            })
+                                          ]),
+                                          _: 1
+                                        },
+                                        8,
+                                        ["config"]
+                                      )
+                                    ]),
+                                    i("div", Ne, [
+                                      c.value
+                                        ? P("", !0)
+                                        : (v(),
+                                          b(
+                                            "p",
+                                            Be,
+                                            e[14] ||
+                                              (e[14] = [
+                                                i(
+                                                  "i",
+                                                  { class: "el-icon-info" },
+                                                  null,
+                                                  -1
+                                                ),
+                                                y(
+                                                  ' 提示：选择演示类型和参数，点击"开始演示"观看动画，或手动选择元素 '
+                                                )
+                                              ])
+                                          )),
+                                      c.value && !f.value
+                                        ? (v(),
+                                          b("p", Ue, [
+                                            e[15] ||
+                                              (e[15] = i(
+                                                "i",
+                                                { class: "el-icon-loading" },
+                                                null,
+                                                -1
+                                              )),
+                                            y(
+                                              " 正在演示" +
+                                                d(
+                                                  w.value === "permutation"
+                                                    ? "排列"
+                                                    : "组合"
+                                                ) +
+                                                "过程... ",
+                                              1
+                                            )
+                                          ]))
+                                        : P("", !0),
+                                      f.value
+                                        ? (v(),
+                                          b(
+                                            "p",
+                                            Le,
+                                            e[16] ||
+                                              (e[16] = [
+                                                i(
+                                                  "i",
+                                                  { class: "el-icon-pause" },
+                                                  null,
+                                                  -1
+                                                ),
+                                                y(
+                                                  ' 演示已暂停，点击"继续"继续观看 '
+                                                )
+                                              ])
+                                          ))
+                                        : P("", !0)
+                                    ])
+                                  ]),
+                                  _: 1
+                                }
+                              )
+                            ]),
+                            _: 1
+                          }
+                        )
+                      ]),
+                      _: 1
+                    }
+                  ),
+                  t(
+                    pe,
+                    { class: "app-footer" },
+                    {
+                      default: a(
+                        () =>
+                          e[17] ||
+                          (e[17] = [
+                            i("p", null, "数学排列组合演示工具 © 2023", -1)
+                          ])
+                      ),
+                      _: 1,
+                      __: [17]
+                    }
+                  )
+                ]),
+                _: 1
+              })
+            ])
+          );
+        }
+      );
+    }
+  },
+  Oe = ye(Te, [["__scopeId", "data-v-4eb40e94"]]);
+export { Oe as default };

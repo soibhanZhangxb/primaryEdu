@@ -1,0 +1,14 @@
+[data-v-6c4d2d66]:root {
+  --primary: #3b82f6;
+  --secondary: #10b981;
+  --accent: #f59e0b;
+  --dark: #1f2937;
+  --light: #f9fafb;
+}
+.text-shadow[data-v-6c4d2d66] {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+[data-v-6c4d2d66] mjx-container {
+  font-size: 1.1em !important;
+  margin: 0 !important;
+}

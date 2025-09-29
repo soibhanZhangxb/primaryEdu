@@ -1,0 +1,598 @@
+import { D as Z } from "./dutils-0Z0zhYva.js";
+import { _ as j } from "./KTextWithBg.vue_vue_type_script_setup_true_lang-B6-_g51U.js";
+import ee from "./DrawingTool-CRhKNQru.js";
+import {
+  d as te,
+  a as f,
+  p as m,
+  m as le,
+  k as C,
+  e as c,
+  g as l,
+  f as x,
+  w as g,
+  h as y,
+  b as p,
+  i as R,
+  F as N,
+  l as X,
+  u as _,
+  t as b,
+  j as V,
+  _ as oe
+} from "./index-ifxKUhWa.js";
+const se = {
+    class: "flex flex-col md:flex-row gap-6 p-4 bg-gray-50 shadow mkonva"
+  },
+  ne = { class: "flex-1" },
+  ae = { class: "border rounded-lg overflow-hidden bg-white" },
+  ue = { class: "p-2 flex justify-between items-center border-left-blue" },
+  ie = { class: "flex gap-2" },
+  re = { class: "relative" },
+  de = { class: "w-full md:w-80 space-y-6" },
+  xe = { class: "bg-white p-4 rounded-lg shadow border-left-blue" },
+  fe = { class: "space-y-3" },
+  ve = { class: "flex items-center justify-between h-full" },
+  ce = { class: "text-xl font-mono font-bold text-blue-600" },
+  me = { class: "flex items-center justify-between h-full" },
+  ye = { class: "text-lg font-mono" },
+  ge = { class: "flex items-center justify-between h-full" },
+  pe = { class: "text-lg font-mono" },
+  _e = { class: "flex items-center justify-between h-full" },
+  be = { class: "text-lg font-mono" },
+  we = { class: "bg-white p-4 rounded-lg shadow" },
+  he = { class: "space-y-4" },
+  ke = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  Ve = { class: "block text-sm font-medium text-gray-700 mb-1" },
+  Fe = { class: "bg-white p-4 rounded-lg shadow" },
+  Se = { class: "space-y-2" },
+  o = 40,
+  Le = te({
+    name: "JLinear",
+    __name: "jlinear",
+    setup(De) {
+      let F = 940,
+        U = 580,
+        t = { x: F / 2, y: U / 2 };
+      const z = f({ lines: [], labels: [] }),
+        i = f(1),
+        I = f(!0),
+        a = f(0),
+        S = f(!0),
+        w = f(!0),
+        A = f(!0),
+        L = f(!0),
+        B = f(!1),
+        M = f({ x: 0, y: 0 }),
+        $ = f(null),
+        G = f(null),
+        P = m(() => {
+          let s = "y = ";
+          const { value: e } = i,
+            { value: u } = a;
+          if (e === 0) return `y = ${u}`;
+          if (
+            (Math.abs(e) === 1 ? (s += e > 0 ? "x" : "-x") : (s += `${e}x`),
+            u !== 0)
+          ) {
+            const r = u > 0 ? " + " : " - ";
+            s += `${r}${Math.abs(u)}`;
+          }
+          return s;
+        }),
+        v = m(() => (i.value === 0 ? null : -a.value / i.value)),
+        E = m(() => a.value),
+        T = m(() => {
+          if (!I.value || !w.value) return null;
+          const s = v.value,
+            e = i.value * s + a.value,
+            u = t.x + s * o,
+            r = t.y - e * o,
+            d = o,
+            h = i.value * o;
+          return {
+            points: [u, r, u + d, r, u + d, r - h],
+            stroke: "#ff6b6b",
+            strokeWidth: 2,
+            fill: "rgba(255, 107, 107, 0.3)",
+            closed: !0
+          };
+        }),
+        W = m(() => {
+          if (!w.value) return null;
+          const s = i.value * (-t.x / o) + a.value,
+            e = i.value * (t.x / o) + a.value,
+            u = (t.y / o - a.value) / i.value,
+            r = (-t.y / o - a.value) / i.value,
+            d = [];
+          return (
+            s >= -t.y / o && s <= t.y / o && d.push({ x: -t.x / o, y: s }),
+            e >= -t.y / o && e <= t.y / o && d.push({ x: t.x / o, y: e }),
+            u >= -t.x / o && u <= t.x / o && d.push({ x: u, y: t.y / o }),
+            r >= -t.x / o && r <= t.x / o && d.push({ x: r, y: -t.y / o }),
+            {
+              points:
+                d.length >= 2
+                  ? [
+                      t.x + d[0].x * o,
+                      t.y - d[0].y * o,
+                      t.x + d[1].x * o,
+                      t.y - d[1].y * o
+                    ]
+                  : [t.x - t.x, t.y - s * o, t.x + t.x, t.y - e * o],
+              stroke: "#3a7bd5",
+              strokeWidth: 3
+            }
+          );
+        }),
+        H = m(() =>
+          !S.value || !w.value
+            ? null
+            : {
+                x: t.x + 10,
+                y: t.y - a.value * o - 10,
+                text: `y截距: ${a.value.toFixed(2)}`,
+                fontSize: 16,
+                fill: "#4ecdc4"
+              }
+        ),
+        q = m(() =>
+          !L.value || !w.value || v.value === null
+            ? null
+            : {
+                x: t.x + v.value * o,
+                y: t.y + 20,
+                text: `x截距: ${v.value.toFixed(2)}`,
+                fontSize: 16,
+                fill: "#ffa502"
+              }
+        ),
+        J = m(() => {
+          if (!w.value) return [];
+          const s = [];
+          return (
+            S.value &&
+              s.push({
+                x: t.x,
+                y: t.y - a.value * o,
+                radius: 6,
+                fill: "#4ecdc4",
+                stroke: "#fff",
+                strokeWidth: 2
+              }),
+            L.value &&
+              v.value !== null &&
+              s.push({
+                x: t.x + v.value * o,
+                y: t.y,
+                radius: 6,
+                fill: "#ffa502",
+                stroke: "#fff",
+                strokeWidth: 2
+              }),
+            s
+          );
+        }),
+        K = () => {
+          (i.value = 1), (a.value = 0);
+        };
+      return (
+        le(() => {
+          var e;
+          z.value = Z.drawGrid(F, U, t, o);
+          const s = (e = $.value) == null ? void 0 : e.getStage();
+          s &&
+            s.on("mousemove", u => {
+              const r = s.getPointerPosition();
+              r && (M.value = { x: Math.round(r.x), y: Math.round(r.y) });
+            });
+        }),
+        (s, e) => {
+          const u = y("v-line"),
+            r = y("v-text"),
+            d = y("v-circle"),
+            h = y("v-layer"),
+            O = y("v-stage"),
+            Y = y("el-slider"),
+            Q = y("el-button"),
+            D = y("el-checkbox");
+          return (
+            c(),
+            C("div", se, [
+              l("div", ne, [
+                l("div", ae, [
+                  l("div", null, [
+                    l("div", ue, [
+                      e[7] ||
+                        (e[7] = l(
+                          "div",
+                          {
+                            class: "text-sm font-medium text-gray-700 bg-gray"
+                          },
+                          " 探索一次函数 y = kx + b 的图像变化规律 ",
+                          -1
+                        )),
+                      l("div", ie, [
+                        x(
+                          ee,
+                          {
+                            enableDrawing: B.value,
+                            "onUpdate:enableDrawing":
+                              e[0] || (e[0] = n => (B.value = n)),
+                            stageRef: $.value,
+                            drawingLayerRef: G.value
+                          },
+                          null,
+                          8,
+                          ["enableDrawing", "stageRef", "drawingLayerRef"]
+                        )
+                      ])
+                    ]),
+                    l("div", re, [
+                      x(
+                        O,
+                        {
+                          ref_key: "stageRef",
+                          ref: $,
+                          config: { width: _(F), height: _(U) }
+                        },
+                        {
+                          default: g(() => [
+                            x(h, null, {
+                              default: g(() => [
+                                (c(!0),
+                                C(
+                                  N,
+                                  null,
+                                  X(
+                                    z.value.lines,
+                                    (n, k) => (
+                                      c(),
+                                      p(
+                                        u,
+                                        { key: "grid-" + k, config: n },
+                                        null,
+                                        8,
+                                        ["config"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                (c(!0),
+                                C(
+                                  N,
+                                  null,
+                                  X(
+                                    z.value.labels,
+                                    (n, k) => (
+                                      c(),
+                                      p(
+                                        r,
+                                        { key: "axe-label-" + k, config: n },
+                                        null,
+                                        8,
+                                        ["config"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                W.value
+                                  ? (c(),
+                                    p(u, { key: 0, config: W.value }, null, 8, [
+                                      "config"
+                                    ]))
+                                  : R("", !0),
+                                T.value
+                                  ? (c(),
+                                    p(u, { key: 1, config: T.value }, null, 8, [
+                                      "config"
+                                    ]))
+                                  : R("", !0),
+                                x(
+                                  j,
+                                  {
+                                    text:
+                                      "斜率: (y-b)/x = " + i.value.toFixed(2),
+                                    x: _(F) - 200,
+                                    y: 2,
+                                    fontSize: 16,
+                                    "bg-color": "#ef4444bb",
+                                    "text-color": "white",
+                                    "corner-radius": 8
+                                  },
+                                  null,
+                                  8,
+                                  ["text", "x"]
+                                ),
+                                q.value
+                                  ? (c(),
+                                    p(
+                                      j,
+                                      {
+                                        key: 2,
+                                        text: "x截距: " + v.value.toFixed(2),
+                                        x: _(t).x + v.value * o,
+                                        y: _(t).y + 20,
+                                        fontSize: 16,
+                                        "bg-color": "#ef4444aa",
+                                        "text-color": "white",
+                                        "corner-radius": 8
+                                      },
+                                      null,
+                                      8,
+                                      ["text", "x", "y"]
+                                    ))
+                                  : R("", !0),
+                                H.value
+                                  ? (c(),
+                                    p(
+                                      j,
+                                      {
+                                        key: 3,
+                                        text: "y截距: " + a.value.toFixed(2),
+                                        x: _(t).x + 10,
+                                        y: _(t).y - a.value * o - 10,
+                                        fontSize: 16,
+                                        "bg-color": "#10b981aa",
+                                        "text-color": "white",
+                                        "corner-radius": 8
+                                      },
+                                      null,
+                                      8,
+                                      ["text", "x", "y"]
+                                    ))
+                                  : R("", !0),
+                                (c(!0),
+                                C(
+                                  N,
+                                  null,
+                                  X(
+                                    J.value,
+                                    (n, k) => (
+                                      c(),
+                                      p(
+                                        d,
+                                        { key: "point-" + k, config: n },
+                                        null,
+                                        8,
+                                        ["config"]
+                                      )
+                                    )
+                                  ),
+                                  128
+                                )),
+                                x(
+                                  j,
+                                  {
+                                    text:
+                                      "坐标: ( " +
+                                      M.value.x +
+                                      ", " +
+                                      M.value.y +
+                                      " )",
+                                    x: 2,
+                                    y: 10,
+                                    fontSize: 16,
+                                    "bg-color": "#333333bb",
+                                    "text-color": "white",
+                                    "corner-radius": 8
+                                  },
+                                  null,
+                                  8,
+                                  ["text"]
+                                )
+                              ]),
+                              _: 1
+                            }),
+                            x(
+                              h,
+                              { ref_key: "drawingLayerRef", ref: G },
+                              null,
+                              512
+                            )
+                          ]),
+                          _: 1
+                        },
+                        8,
+                        ["config"]
+                      )
+                    ])
+                  ])
+                ])
+              ]),
+              l("div", de, [
+                l("div", xe, [
+                  e[12] ||
+                    (e[12] = l(
+                      "h3",
+                      { class: "text-lg font-semibold mb-4 text-gray-800" },
+                      "方程信息:",
+                      -1
+                    )),
+                  l("div", fe, [
+                    l("div", ve, [
+                      e[8] ||
+                        (e[8] = l(
+                          "p",
+                          { class: "text-sm text-gray-600" },
+                          "标准形式",
+                          -1
+                        )),
+                      l("p", ce, b(P.value), 1)
+                    ]),
+                    l("div", me, [
+                      e[9] ||
+                        (e[9] = l(
+                          "p",
+                          { class: "text-sm text-gray-600" },
+                          "斜率",
+                          -1
+                        )),
+                      l("p", ye, b(i.value.toFixed(2)), 1)
+                    ]),
+                    l("div", ge, [
+                      e[10] ||
+                        (e[10] = l(
+                          "p",
+                          { class: "text-sm text-gray-600" },
+                          "Y轴交点",
+                          -1
+                        )),
+                      l("p", pe, b(E.value.toFixed(2)), 1)
+                    ]),
+                    l("div", _e, [
+                      e[11] ||
+                        (e[11] = l(
+                          "p",
+                          { class: "text-sm text-gray-600" },
+                          "X轴交点",
+                          -1
+                        )),
+                      l(
+                        "p",
+                        be,
+                        b(v.value !== null ? v.value.toFixed(2) : "无"),
+                        1
+                      )
+                    ])
+                  ])
+                ]),
+                l("div", we, [
+                  e[14] ||
+                    (e[14] = l(
+                      "h3",
+                      { class: "text-lg font-semibold mb-4 text-gray-800" },
+                      "参数控制",
+                      -1
+                    )),
+                  l("div", he, [
+                    l("div", null, [
+                      l("label", ke, " 斜率k: " + b(i.value.toFixed(2)), 1),
+                      x(
+                        Y,
+                        {
+                          modelValue: i.value,
+                          "onUpdate:modelValue":
+                            e[1] || (e[1] = n => (i.value = n)),
+                          min: -5,
+                          max: 5,
+                          step: 0.1,
+                          "show-input": ""
+                        },
+                        null,
+                        8,
+                        ["modelValue"]
+                      )
+                    ]),
+                    l("div", null, [
+                      l("label", Ve, " 截距: " + b(a.value.toFixed(2)), 1),
+                      x(
+                        Y,
+                        {
+                          modelValue: a.value,
+                          "onUpdate:modelValue":
+                            e[2] || (e[2] = n => (a.value = n)),
+                          min: -10,
+                          max: 10,
+                          step: 0.1,
+                          "show-input": ""
+                        },
+                        null,
+                        8,
+                        ["modelValue"]
+                      )
+                    ]),
+                    x(
+                      Q,
+                      { type: "info", class: "w-full", onClick: K },
+                      {
+                        default: g(() => e[13] || (e[13] = [V(" 重置 ")])),
+                        _: 1,
+                        __: [13]
+                      }
+                    )
+                  ])
+                ]),
+                l("div", Fe, [
+                  e[19] ||
+                    (e[19] = l(
+                      "h3",
+                      { class: "text-lg font-semibold mb-4 text-gray-800" },
+                      "显示选项",
+                      -1
+                    )),
+                  l("div", Se, [
+                    x(
+                      D,
+                      {
+                        modelValue: A.value,
+                        "onUpdate:modelValue":
+                          e[3] || (e[3] = n => (A.value = n))
+                      },
+                      {
+                        default: g(() => e[15] || (e[15] = [V("显示网格")])),
+                        _: 1,
+                        __: [15]
+                      },
+                      8,
+                      ["modelValue"]
+                    ),
+                    x(
+                      D,
+                      {
+                        modelValue: I.value,
+                        "onUpdate:modelValue":
+                          e[4] || (e[4] = n => (I.value = n))
+                      },
+                      {
+                        default: g(() => e[16] || (e[16] = [V("显示斜率")])),
+                        _: 1,
+                        __: [16]
+                      },
+                      8,
+                      ["modelValue"]
+                    ),
+                    x(
+                      D,
+                      {
+                        modelValue: S.value,
+                        "onUpdate:modelValue":
+                          e[5] || (e[5] = n => (S.value = n))
+                      },
+                      {
+                        default: g(() => e[17] || (e[17] = [V("显示y截距")])),
+                        _: 1,
+                        __: [17]
+                      },
+                      8,
+                      ["modelValue"]
+                    ),
+                    x(
+                      D,
+                      {
+                        modelValue: L.value,
+                        "onUpdate:modelValue":
+                          e[6] || (e[6] = n => (L.value = n)),
+                        disabled: v.value === null
+                      },
+                      {
+                        default: g(() => e[18] || (e[18] = [V(" 显示x截距 ")])),
+                        _: 1,
+                        __: [18]
+                      },
+                      8,
+                      ["modelValue", "disabled"]
+                    )
+                  ])
+                ])
+              ])
+            ])
+          );
+        }
+      );
+    }
+  }),
+  ze = oe(Le, [["__scopeId", "data-v-6eb825a6"]]);
+export { ze as default };

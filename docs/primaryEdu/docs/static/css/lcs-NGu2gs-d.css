@@ -1,0 +1,17 @@
+.border-left-blue[data-v-ae293dfb] {
+  border-left: 4px solid #409eff;
+}
+.mkonva[data-v-ae293dfb] {
+  background-color: #f5f7fa;
+  border-radius: 12px;
+  padding: 20px;
+}
+[data-v-ae293dfb] .el-slider__input {
+  width: 110px;
+}
+.step-controls[data-v-ae293dfb] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
