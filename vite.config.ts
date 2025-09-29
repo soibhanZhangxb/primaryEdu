@@ -49,9 +49,9 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         },
         // 静态资源分类打包
         output: {
-          chunkFileNames: "primaryEdu/static/js/[name]-[hash].js",
-          entryFileNames: "primaryEdu/static/js/[name]-[hash].js",
-          assetFileNames: "primaryEdu/static/[ext]/[name]-[hash].[ext]"
+          chunkFileNames: "static/js/[name]-[hash].js",
+          entryFileNames: "static/js/[name]-[hash].js",
+          assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       }
     },
