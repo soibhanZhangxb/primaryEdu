@@ -1,0 +1,76 @@
+import { A as i } from "./arrow-right-s-line-Dpd--3Jy.js";
+import { C as r } from "./close-circle-line-BBb_oSPT.js";
+import { f as e, h as l, j as o } from "./index-DkZ5200C.js";
+function t() {
+  return {
+    columns: [
+      {
+        cellRenderer: () =>
+          e("div", { class: "w-full" }, [
+            e("div", { class: "flex items-center" }, [
+              e(
+                l("iconify-icon-offline"),
+                { icon: r, width: "18px", height: "18px" },
+                null
+              ),
+              e("span", { class: "ml-1 mr-4" }, [o("您的账户已被冻结")]),
+              e(
+                "a",
+                {
+                  href: "javascript:void(0);",
+                  class: "flex items-center",
+                  style: "color: var(--el-color-primary)"
+                },
+                [
+                  o("立即解冻"),
+                  e(
+                    l("iconify-icon-offline"),
+                    {
+                      icon: i,
+                      color: "var(--el-color-primary)",
+                      width: "18px",
+                      height: "18px"
+                    },
+                    null
+                  )
+                ]
+              )
+            ]),
+            e("br", null, null),
+            e("div", { class: "flex items-center" }, [
+              e(
+                l("iconify-icon-offline"),
+                { icon: r, width: "18px", height: "18px" },
+                null
+              ),
+              e("span", { class: "ml-1 mr-4" }, [
+                o("您的账户还不具备申请资格")
+              ]),
+              e(
+                "a",
+                {
+                  href: "javascript:void(0);",
+                  class: "flex items-center",
+                  style: "color: var(--el-color-primary)"
+                },
+                [
+                  o("立即升级"),
+                  e(
+                    l("iconify-icon-offline"),
+                    {
+                      icon: i,
+                      color: "var(--el-color-primary)",
+                      width: "18px",
+                      height: "18px"
+                    },
+                    null
+                  )
+                ]
+              )
+            ])
+          ])
+      }
+    ]
+  };
+}
+export { t as useColumns };

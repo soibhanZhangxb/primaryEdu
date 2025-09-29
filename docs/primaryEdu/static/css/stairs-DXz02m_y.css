@@ -1,0 +1,26 @@
+.border-left-blue[data-v-188b9845] {
+  border-left: 4px solid #409eff;
+}
+.mkonva[data-v-188b9845] {
+  background-color: #f5f7fa;
+  border-radius: 12px;
+  padding: 20px;
+}
+[data-v-188b9845] .el-slider__input {
+  width: 110px;
+}
+.step-controls[data-v-188b9845] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.algorithm-explanation[data-v-188b9845] {
+  background-color: #f0f9ff;
+  border-left: 3px solid #409eff;
+  border-radius: 6px;
+  padding: 12px;
+}
+[data-v-188b9845] .konvajs-content canvas {
+  cursor: pointer;
+}
