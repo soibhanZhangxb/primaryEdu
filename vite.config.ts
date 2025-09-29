@@ -42,7 +42,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       sourcemap: false,
       // 消除打包大小超过500kb警告
       chunkSizeWarningLimit: 4000,
-      //outDir: "dist", // 指定输出目录为 primaryEdu
+      outDir: "dist/primaryEdu", // 指定输出目录为 primaryEdu
       rollupOptions: {
         input: {
           index: pathResolve("./index.html", import.meta.url)
