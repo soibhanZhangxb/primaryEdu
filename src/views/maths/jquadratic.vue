@@ -4,8 +4,8 @@ import DUtils from "@/utils/my/dutils";
 import KTextWithBg from "@/views/components/konva/KTextWithBg.vue";
 import DrawingTool from "@/views/components/konva/DrawingTool.vue";
 import MathJax from "vue-mathjax-v3";
-import {filterSpecialChars} from "@/utils/my/myUtils";
-import {parseQuadraticFunction} from "@/utils/my/functional";
+import { filterSpecialChars } from "@/utils/my/myUtils";
+import { parseQuadraticFunction } from "@/utils/my/functional";
 
 defineOptions({ name: "JQuadratic" });
 
@@ -34,7 +34,7 @@ const mousePos = ref({ x: 0, y: 0 }); // 当前鼠标坐标位置
 //const formula = ref("$$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}$$");
 // 公式可以是响应式变量
 const formula = "$$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}$$";
-const topXY =  "$$({-b \\over 2a}， {{4ac - b^2} \\over 4a})$$"; //"（ -b/(2a),  c - b²/(4a) ）";
+const topXY = "$$({-b \\over 2a}， {{4ac - b^2} \\over 4a})$$"; //"（ -b/(2a),  c - b²/(4a) ）";
 const axisX = "$${-b \\over 2a}$$"; //抛物线对称轴
 // Canvas引用
 const stageRef = ref<any>(null);
@@ -254,11 +254,11 @@ const xInterceptsMarkers = computed(() => {
   ) {
     return [];
   }
-  let offsetX = [0,0];
-  if(xIntercepts.value.length==2) {
+  let offsetX = [0, 0];
+  if (xIntercepts.value.length == 2) {
     let x1 = xIntercepts.value[0].toFixed(5);
     let x2 = xIntercepts.value[1].toFixed(5);
-    offsetX = (x1>x2) ? [0, -70] : [-70, 0];
+    offsetX = x1 > x2 ? [0, -70] : [-70, 0];
   }
 
   return xIntercepts.value.map((x, index) => {
@@ -287,8 +287,7 @@ const handleClear = () => {
   a.value = 1;
   b.value = 2;
   c.value = -2;
-}
-
+};
 
 // 生命周期钩子
 onMounted(() => {
@@ -432,10 +431,22 @@ watch([a, b, c], () => {
             <el-slider v-model="a" :min="-5" :max="5" :step="0.1" show-input />
           </el-form-item>
           <el-form-item label="b" class="">
-            <el-slider v-model="b" :min="-10" :max="10" :step="0.1" show-input />
+            <el-slider
+              v-model="b"
+              :min="-10"
+              :max="10"
+              :step="0.1"
+              show-input
+            />
           </el-form-item>
           <el-form-item label="c" class="">
-            <el-slider v-model="c" :min="-10" :max="10" :step="0.1" show-input />
+            <el-slider
+              v-model="c"
+              :min="-10"
+              :max="10"
+              :step="0.1"
+              show-input
+            />
           </el-form-item>
           <el-form-item label="" class="">
             <el-button type="info" class="w-full" @click="handleClear">
@@ -448,12 +459,23 @@ watch([a, b, c], () => {
       <div class="bg-white p-4 rounded-lg shadow border-left-blue">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">方程信息:</h3>
         <el-form class="right-forms" label-position="right" label-width="100">
-          <el-form-item label="y = " class="" style="margin-bottom: 10px !important;">
+          <el-form-item
+            label="y = "
+            class=""
+            style="margin-bottom: 10px !important"
+          >
             <!-- input失去焦点、按下回车、清空内容 -->
-            <el-input v-model="quadraticFunction" style="font-size: 21px;" @blur="handleOk" @clear="handleClear" @keyup.enter="handleOk" />
+            <el-input
+              v-model="quadraticFunction"
+              style="font-size: 21px"
+              @blur="handleOk"
+              @clear="handleClear"
+              @keyup.enter="handleOk"
+            />
           </el-form-item>
           <el-form-item label="判别式:" class="">
-            <div class="text-lg font-mono"> △ = b² - 4ac</div><!-- discriminant.toFixed(2) -->
+            <div class="text-lg font-mono">△ = b² - 4ac</div>
+            <!-- discriminant.toFixed(2) -->
           </el-form-item>
           <el-form-item label="求根公式:" class="">
             <MathJax :formula="formula" />
@@ -490,15 +512,15 @@ watch([a, b, c], () => {
 :deep(.el-slider__input) {
   width: 110px;
 }
-.right-forms{
-  :deep(.el-form-item){
+.right-forms {
+  :deep(.el-form-item) {
     display: flex;
     margin: 1px 0 !important;
     align-items: center;
-    .el-form-item__label{
+    .el-form-item__label {
       font-size: 16px;
     }
-    .el-form-item__content{
+    .el-form-item__content {
       padding: 2px 4px 2px 8px;
       background-color: #c5c5c5;
       border-radius: 12px;
@@ -508,7 +530,7 @@ watch([a, b, c], () => {
     }
   }
 }
-:deep(.MathJax){
+:deep(.MathJax) {
   margin: 2px 0 !important;
 }
 </style>
