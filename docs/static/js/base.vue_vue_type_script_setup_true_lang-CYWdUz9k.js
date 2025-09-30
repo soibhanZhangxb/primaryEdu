@@ -1,1 +1,0 @@
-import{t as o}from"./data-B6gbZes2.js";import{d as t,C as n,m as r,g as p,a as s}from"./index-CaGTsnvz.js";const b=t({__name:"base",setup(l){const e=[{label:"日期",prop:"date"},{label:"姓名",prop:"name"},{label:"地址",prop:"address"}];return(c,m)=>{const a=n("pure-table");return p(),r(a,{data:s(o),columns:e},null,8,["data"])}}});export{b as _};

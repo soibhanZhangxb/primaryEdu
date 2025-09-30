@@ -1,0 +1,1 @@
+import{u as s}from"./hooks-BoCK6E1x.js";import{d as n,f as o,g as i,B as m,h as l,bF as e,a as t}from"./index-4iHgqUda.js";const f=n({name:"TabParamsDetail",__name:"params-detail",setup(p){const{initToDetail:r,getParameter:a}=s();return r("params"),(c,u)=>(i(),o("div",null,[m(e(t(a).id)+" - 详情页内容在此（params传参） ",1),l("p",null,"当前页面参数为："+e(t(a)),1)]))}});export{f as default};
