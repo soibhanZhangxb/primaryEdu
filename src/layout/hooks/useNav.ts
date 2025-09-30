@@ -142,7 +142,7 @@ export function useNav() {
     return remainingPaths.includes(path);
   }
 
-  /** 获取`logo` */
+  /** 获取`logo data数据` */
   function getLogo() {
     return new URL("/primaryEdu/logo.svg", import.meta.url).href;
   }

@@ -1,1 +1,0 @@
-import{x as r,f as t,g as o,h as l}from"./index-CK63t3SI.js";const n={viewBox:"0 0 24 24",width:"1em",height:"1em"};function a(i,e){return o(),t("svg",n,e[0]||(e[0]=[l("path",{fill:"currentColor",d:"m13.172 12l-4.95-4.95l1.414-1.413L16 12l-6.364 6.364l-1.414-1.415z"},null,-1)]))}const m=r({name:"ri-arrow-right-s-line",render:a});export{m as A};
