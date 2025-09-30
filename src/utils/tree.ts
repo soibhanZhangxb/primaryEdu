@@ -59,6 +59,13 @@ export const buildHierarchyTree = (tree: any[], pathList = []): any => {
     return [];
   }
   if (!tree || tree.length === 0) return [];
+  //删除空元素
+  tree.forEach((item, index) => {
+    if (!item) {
+      tree.splice(index, 1);
+    }
+  });
+
   for (const [key, node] of tree.entries()) {
     node.id = key;
     node.parentId = pathList.length ? pathList[pathList.length - 1] : null;

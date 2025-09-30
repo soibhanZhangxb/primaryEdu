@@ -4,6 +4,7 @@ import "codemirror/addon/hint/show-hint.css";
 import "codemirror/addon/hint/show-hint";
 import "codemirror/addon/hint/javascript-hint.js";
 import "codemirror/mode/javascript/javascript.js";
+//import "codemirror/mode/clike/clike.js";
 
 import { useDark } from "@pureadmin/utils";
 import Codemirror from "codemirror-editor-vue3";
@@ -81,7 +82,7 @@ watch(
     <Codemirror
       v-model:value="code"
       width="100%"
-      height="400px"
+      height="800px"
       :options="cmOptions"
       :border="true"
       @ready="onReady"

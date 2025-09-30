@@ -23,6 +23,7 @@ const DUtils = {
     const obj = { lines: [], labels: [] };
     const stepsX = Math.ceil(width / scale) + 1;
     const stepsY = Math.ceil(height / scale) + 1;
+    const gcolor = "#aaa";
 
     // Y轴 和 垂直网格线
     for (let i = -stepsX; i <= stepsX; i++) {
@@ -35,7 +36,7 @@ const DUtils = {
       //x轴刻度
       obj.lines.push({
         points: [x, origin.y, x, origin.y - 8],
-        stroke: "#333",
+        stroke: gcolor,
         strokeWidth: 2
       });
       //x轴刻度的标签
@@ -44,7 +45,7 @@ const DUtils = {
         y: origin.y + 10,
         text: i,
         fontSize: 13,
-        fill: "#333"
+        fill: gcolor
       });
     }
     // x轴 和 水平网格线
@@ -58,7 +59,7 @@ const DUtils = {
       //y轴刻度
       obj.lines.push({
         points: [origin.x, y, origin.x + 8, y],
-        stroke: "#333",
+        stroke: gcolor,
         strokeWidth: 2
       });
       //y轴刻度的标签
@@ -68,7 +69,7 @@ const DUtils = {
           y: y - 5,
           text: -i,
           fontSize: 13,
-          fill: "#333"
+          fill: gcolor
         });
       }
     }
@@ -78,14 +79,14 @@ const DUtils = {
       y: origin.y - 20,
       text: "x",
       fontSize: 18,
-      fill: "#000"
+      fill: gcolor
     });
     obj.labels.push({
       x: origin.x + 10,
       y: 20,
       text: "y",
       fontSize: 18,
-      fill: "#000"
+      fill: gcolor
     });
 
     // x轴箭头, y轴箭头

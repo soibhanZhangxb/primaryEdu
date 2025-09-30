@@ -66,6 +66,8 @@ declare global {
   interface ViteEnv {
     VITE_PORT: number;
     VITE_PUBLIC_PATH: string;
+    VITE_PUBLIC_PATH_PROJECT: string,
+    VITE_STATIC_PREFIX: string,
     VITE_ROUTER_HISTORY: string;
     VITE_CDN: boolean;
     VITE_HIDE_HOME: string;

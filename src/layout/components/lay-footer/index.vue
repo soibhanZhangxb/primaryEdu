@@ -10,11 +10,11 @@ const TITLE = getConfig("Title");
   >
     Copyright © 2020-present
     <a
-      class="hover:text-primary!"
+      class="hover:text-primary! ml-2"
       href="https://github.com/pure-admin"
       target="_blank"
     >
-      &nbsp;{{ TITLE }}
+      看见知识，洞见本质 --- 用可视化，实践费曼学习法
     </a>
   </footer>
 </template>

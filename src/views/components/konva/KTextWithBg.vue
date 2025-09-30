@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   y: 0,
   fontSize: 16,
   fontFamily: "Arial",
-  textColor: "#333",
+  textColor: "#555",
   bgColor: "#f0f0f0",
   padding: 5,
   cornerRadius: 5

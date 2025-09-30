@@ -10,9 +10,9 @@ export default defineFakeRoute([
         return {
           success: true,
           data: {
-            avatar: "https://avatars.githubusercontent.com/u/44761321",
+            avatar: "https://avatars.githubusercontent.com/u/52823142",
             username: "admin",
-            nickname: "小明",
+            nickname: "爱学习",
             // 一个用户可能有多个角色
             roles: ["admin"],
             // 按钮级别权限

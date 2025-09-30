@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import DUtils from "@/utils/my/dutils";
 import KTextWithBg from "@/views/components/konva/KTextWithBg.vue";
 import DrawingTool from "@/views/components/konva/DrawingTool.vue";
 import MathJax from "vue-mathjax-v3";
+import {filterSpecialChars} from "@/utils/my/myUtils";
+import {parseQuadraticFunction} from "@/utils/my/functional";
 
 defineOptions({ name: "JQuadratic" });
 
 // 常量定义
 let CANVAS_WIDTH = 940;
-let CANVAS_HEIGHT = 580;
+let CANVAS_HEIGHT = 680;
 let origin = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
 const SCALE = 40; // 每单位像素数
 
 const gGrid = ref({ lines: [], labels: [] });
 // 响应式状态
 const a = ref(1); // 二次项系数
-const b = ref(0); // 一次项系数
-const c = ref(0); // 常数项
+const b = ref(2); // 一次项系数
+const c = ref(-2); // 常数项
+const quadraticFunction = ref("x² + 2x - 2");
 const showVertex = ref(true); // 显示顶点
 const showAxis = ref(true); // 显示对称轴
 const showGraph = ref(true);
@@ -31,6 +34,8 @@ const mousePos = ref({ x: 0, y: 0 }); // 当前鼠标坐标位置
 //const formula = ref("$$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}$$");
 // 公式可以是响应式变量
 const formula = "$$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}$$";
+const topXY =  "$$({-b \\over 2a}， {{4ac - b^2} \\over 4a})$$"; //"（ -b/(2a),  c - b²/(4a) ）";
+const axisX = "$${-b \\over 2a}$$"; //抛物线对称轴
 // Canvas引用
 const stageRef = ref<any>(null);
 const drawingLayerRef = ref<any>(null);
@@ -38,7 +43,7 @@ const drawingLayerRef = ref<any>(null);
 // 计算属性
 // 方程表达式
 const equation = computed(() => {
-  let y = "y = ";
+  let y = ""; //"y = ";
   const { value: aVal } = a;
   const { value: bVal } = b;
   const { value: cVal } = c;
@@ -249,27 +254,45 @@ const xInterceptsMarkers = computed(() => {
   ) {
     return [];
   }
+  let offsetX = [0,0];
+  if(xIntercepts.value.length==2) {
+    let x1 = xIntercepts.value[0].toFixed(5);
+    let x2 = xIntercepts.value[1].toFixed(5);
+    offsetX = (x1>x2) ? [0, -70] : [-70, 0];
+  }
 
   return xIntercepts.value.map((x, index) => {
     return {
-      x: origin.x + x * SCALE,
+      x: origin.x + x * SCALE + offsetX[index],
       y: origin.y + 20,
-      text: `解: ${x.toFixed(2)}`,
+      //text: `解: ${x.toFixed(2)}`,
+      text: `${x.toFixed(2)}`,
       fontSize: 16,
       fill: "#EE2A2AD1"
     };
   });
 });
 
-// 方法
-const resetView = () => {
-  a.value = 1;
-  b.value = 0;
-  c.value = 0;
+const handleOk = () => {
+  let str = filterSpecialChars(quadraticFunction.value);
+  if (str != quadraticFunction.value) {
+    quadraticFunction.value = str;
+  }
+  let result = parseQuadraticFunction(str);
+  a.value = result.coefficients.a;
+  b.value = result.coefficients.b;
+  c.value = result.coefficients.c;
 };
+const handleClear = () => {
+  a.value = 1;
+  b.value = 2;
+  c.value = -2;
+}
+
 
 // 生命周期钩子
 onMounted(() => {
+  //画网格和x,y轴函数
   gGrid.value = DUtils.drawGrid(CANVAS_WIDTH, CANVAS_HEIGHT, origin, SCALE);
   // 添加鼠标位置监听
   const stage = stageRef.value?.getStage();
@@ -284,6 +307,11 @@ onMounted(() => {
       }
     });
   }
+});
+
+//监控a,b,c变化
+watch([a, b, c], () => {
+  quadraticFunction.value = equation.value;
 });
 </script>
 
@@ -395,120 +423,62 @@ onMounted(() => {
     </div>
 
     <!-- 控制面板 -->
-    <div class="w-full md:w-80 space-y-6">
+    <div class="w-full md:w-120 space-y-2">
+      <!-- 参数控制 -->
+      <div class="bg-white p-4 rounded-lg shadow border-left-blue">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">参数控制</h3>
+        <el-form>
+          <el-form-item label="a" class="">
+            <el-slider v-model="a" :min="-5" :max="5" :step="0.1" show-input />
+          </el-form-item>
+          <el-form-item label="b" class="">
+            <el-slider v-model="b" :min="-10" :max="10" :step="0.1" show-input />
+          </el-form-item>
+          <el-form-item label="c" class="">
+            <el-slider v-model="c" :min="-10" :max="10" :step="0.1" show-input />
+          </el-form-item>
+          <el-form-item label="" class="">
+            <el-button type="info" class="w-full" @click="handleClear">
+              重置
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <!-- 函数方程 -->
       <div class="bg-white p-4 rounded-lg shadow border-left-blue">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">方程信息:</h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">标准形式</p>
-            <p class="text-xl font-mono font-bold text-blue-600">
-              {{ equation }}
-            </p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">判别式:</p>
-            <p class="text-lg font-mono">
-              {{ "△ = b² - 4ac, " + discriminant.toFixed(2) }}
-            </p>
-          </div>
-          <div
-            class="flex items-center justify-between h-full"
-            style=" padding: 0 5px;background: #4c484829; border-radius: 8px"
-          >
-            <p class="text-sm text-gray-600">求根公式:</p>
-            <p class="text-lg font-mono">
-              <MathJax :formula="formula" />
-            </p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">顶点坐标:</p>
-            <p class="text-lg font-mono">x = -b/(2a), <br />y = c - b²/(4a)</p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">顶点坐标点</p>
-            <p class="text-lg font-mono">
-              {{
-                vertex !== null
-                  ? `(${vertex.x.toFixed(2)}, ${vertex.y.toFixed(2)})`
-                  : "无"
-              }}
-            </p>
-          </div>
-
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">X轴交点</p>
-            <p class="text-lg font-mono">
-              {{
-                xIntercepts.length > 0
-                  ? xIntercepts.map(x => x.toFixed(2)).join(", ")
-                  : "无实根"
-              }}
-            </p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">对称轴</p>
-            <p class="text-lg font-mono">
-              {{
-                axisOfSymmetry !== null
-                  ? `x = ${axisOfSymmetry.toFixed(2)}`
-                  : "无"
-              }}
-            </p>
-          </div>
-        </div>
+        <el-form class="right-forms" label-position="right" label-width="100">
+          <el-form-item label="y = " class="" style="margin-bottom: 10px !important;">
+            <!-- input失去焦点、按下回车、清空内容 -->
+            <el-input v-model="quadraticFunction" style="font-size: 21px;" @blur="handleOk" @clear="handleClear" @keyup.enter="handleOk" />
+          </el-form-item>
+          <el-form-item label="判别式:" class="">
+            <div class="text-lg font-mono"> △ = b² - 4ac</div><!-- discriminant.toFixed(2) -->
+          </el-form-item>
+          <el-form-item label="求根公式:" class="">
+            <MathJax :formula="formula" />
+          </el-form-item>
+          <el-form-item label="中心对称轴:" class="">
+            <MathJax :formula="axisX" />
+          </el-form-item>
+          <el-form-item label="顶点坐标:" class="">
+            <MathJax :formula="topXY" />
+          </el-form-item>
+        </el-form>
       </div>
 
-      <div class="bg-white p-4 rounded-lg shadow">
-        <h3 class="text-lg font-semibold mb-4 text-gray-800">参数控制</h3>
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              二次项系数a: {{ a.toFixed(2) }}
-            </label>
-            <el-slider v-model="a" :min="-5" :max="5" :step="0.1" show-input />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              一次项系数b: {{ b.toFixed(2) }}
-            </label>
-            <el-slider
-              v-model="b"
-              :min="-10"
-              :max="10"
-              :step="0.1"
-              show-input
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              常数项c: {{ c.toFixed(2) }}
-            </label>
-            <el-slider
-              v-model="c"
-              :min="-10"
-              :max="10"
-              :step="0.1"
-              show-input
-            />
-          </div>
-          <el-button type="info" class="w-full" @click="resetView">
-            重置
-          </el-button>
-        </div>
-      </div>
-
-      <div class="bg-white p-4 rounded-lg shadow">
+      <div class="bg-white p-4 rounded-lg shadow border-left-blue">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">显示选项</h3>
         <div class="space-y-2">
-          <el-checkbox v-model="showGrid">显示网格</el-checkbox>
-          <el-checkbox v-model="showVertex">显示顶点</el-checkbox>
-          <el-checkbox v-model="showAxis">显示对称轴</el-checkbox>
-          <el-checkbox v-model="showYIntercept">显示y截距</el-checkbox>
+          <el-checkbox v-model="showGrid">网格</el-checkbox>
+          <el-checkbox v-model="showVertex">顶点</el-checkbox>
+          <el-checkbox v-model="showAxis">对称轴</el-checkbox>
+          <el-checkbox v-model="showYIntercept">y截距</el-checkbox>
           <el-checkbox
             v-model="showXIntercepts"
             :disabled="xIntercepts.length === 0"
           >
-            显示x截距
+            x截距
           </el-checkbox>
         </div>
       </div>
@@ -519,5 +489,26 @@ onMounted(() => {
 <style scoped lang="scss">
 :deep(.el-slider__input) {
   width: 110px;
+}
+.right-forms{
+  :deep(.el-form-item){
+    display: flex;
+    margin: 1px 0 !important;
+    align-items: center;
+    .el-form-item__label{
+      font-size: 16px;
+    }
+    .el-form-item__content{
+      padding: 2px 4px 2px 8px;
+      background-color: #c5c5c5;
+      border-radius: 12px;
+      font-size: 18px;
+      //display: flex;
+      //justify-content: flex-start;
+    }
+  }
+}
+:deep(.MathJax){
+  margin: 2px 0 !important;
 }
 </style>

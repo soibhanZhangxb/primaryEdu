@@ -18,9 +18,7 @@ import {
   IntroPanel
 } from "./components";
 
-defineOptions({
-  name: "ChatAi"
-});
+defineOptions({ name: "ChatAi2" });
 
 const swiperExample: any[] = [
   { id: 0, label: "ChatGPT 风格", component: ChatGPT },

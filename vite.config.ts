@@ -10,7 +10,7 @@ import {
 } from "./build/utils";
 
 export default ({ mode }: ConfigEnv): UserConfigExport => {
-  const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH } =
+  const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH, VITE_STATIC_PREFIX } =
     wrapperEnv(loadEnv(mode, root));
   return {
     base: VITE_PUBLIC_PATH,
@@ -49,9 +49,13 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         },
         // 静态资源分类打包
         output: {
+          chunkFileNames: `${VITE_STATIC_PREFIX}static/js/[name]-[hash].js`,
+          entryFileNames: `${VITE_STATIC_PREFIX}static/js/[name]-[hash].js`,
+          assetFileNames: `${VITE_STATIC_PREFIX}static/[ext]/[name]-[hash].[ext]`
+          /*//--- 打包
           chunkFileNames: "primaryEdu/static/js/[name]-[hash].js",
           entryFileNames: "primaryEdu/static/js/[name]-[hash].js",
-          assetFileNames: "primaryEdu/static/[ext]/[name]-[hash].[ext]"
+          assetFileNames: "primaryEdu/static/[ext]/[name]-[hash].[ext]"*/
         }
       }
     },
