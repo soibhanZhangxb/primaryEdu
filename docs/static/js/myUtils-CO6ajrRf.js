@@ -1,0 +1,1 @@
+import"./index-Dks_UUQM.js";const p=(t,r=" ")=>t.split(r).filter(e=>e!==""),c=t=>{if(i(t))return"";const r=/[#{}=*^&%$@!,，。<>;:：；‘’“”、'"`\\]/g;return t.replace(r,"")};function i(t){return t==null||t==""||t==null}export{c as f,p as m};

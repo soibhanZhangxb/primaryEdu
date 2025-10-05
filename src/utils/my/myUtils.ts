@@ -29,6 +29,15 @@ export const filterSpecialChars = (val: string) => {
   const regexpSpecialStr = /[#·{}+=*^&%$@!.,，。<>;:：；‘’“”、'"`\\/\\]/g;
   return val.replace(regexpSpecialStr, "");
 };
+/**
+ * 过滤特殊字符， 排除逗号，+ -
+ */
+export const filterSpecialChars2 = (val: string) => {
+  if (isEmpty(val)) return "";
+  const regexpSpecialStr = /[#{}=*^&%$@!,，。<>;:：；‘’“”、'"`\\]/g;
+  return val.replace(regexpSpecialStr, "");
+};
+
 //检查所有属性是否为 falsy 值（null、undefined、""、0、false）
 export function objectIsEmpty(obj) {
   return Object.values(obj).every(val => !val);
@@ -40,7 +49,7 @@ export function singleQuotationMarksEscape(str: string) {
 }
 
 export function singleQuotationMarksEscapeObject(obj: object) {
-  for (let key in obj) {
+  for (const key in obj) {
     if (typeJudge(obj[key], "string")) {
       obj[key] = singleQuotationMarksEscape(obj[key]);
     }
@@ -149,7 +158,7 @@ export function parseTime(
     a: date.getDay()
   };
   const timeStr = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
-    let value = formatObj[key];
+    const value = formatObj[key];
     // Note: getDay() returns 0 on Sunday
     if (key === "a") {
       return ["日", "一", "二", "三", "四", "五", "六"][value];
@@ -266,7 +275,7 @@ export function toggleClass(ele: HTMLElement, className: string) {
  * 获取 organId 的所有父类ids
  */
 export function organIdToOrganIds(organId: string) {
-  let organIds: string[] = [];
+  const organIds: string[] = [];
   if (organId) {
     for (let i = 1; i <= organId.length / 2; i++) {
       organIds.push(organId.substring(0, 2 * i));
@@ -281,11 +290,11 @@ export function organIdToOrganIds(organId: string) {
  * @param isOne     是否为一维数组，获取最后一个id, 否则为多维获取每一组最后一个id
  */
 export function getOrganIds(organIds: any, isMulti: boolean = true) {
-  let ids: string[] = [],
+  const ids: string[] = [],
     n = organIds.length;
   if (isMulti) {
     for (let i = 0; i < n; i++) {
-      let childs: string[] = organIds[i];
+      const childs: string[] = organIds[i];
       ids.push(childs[childs.length - 1]);
     }
   } else {
@@ -300,7 +309,7 @@ export function getOrganIds(organIds: any, isMulti: boolean = true) {
  * 浅拷贝，只拷贝des存在的属性
  */
 export function objCopy(des: any, src: any) {
-  for (let key in des) {
+  for (const key in des) {
     if (src[key] != undefined) {
       des[key] = src[key];
     }
@@ -321,7 +330,6 @@ export function objClone(obj: any) {
 export function deepClone(obj: any) {
   return JSON.parse(JSON.stringify(obj));
 }
-
 
 export function resetPercent(list: any = [], field: string = "total") {
   let total = 0;
@@ -361,7 +369,7 @@ export function LinetoHump(name: string) {
  * @constructor
  */
 export function ListToMap(list: any, key: string, vlaue: string = "") {
-  let map: any = {};
+  const map: any = {};
   if (list && list instanceof Array) {
     list.forEach(item => {
       if (item[key]) map[item[key]] = vlaue == "" ? item : item[vlaue];
@@ -377,7 +385,7 @@ export function ListToMap(list: any, key: string, vlaue: string = "") {
  */
 export function setChartDataValueFromtype(src, des) {
   for (let i = 0; i < des.length; i++) {
-    let key = des[i].type;
+    const key = des[i].type;
     if (src[key]) {
       des[i].value = src[key];
     }
@@ -388,7 +396,7 @@ export function setChartDataValueFromtype(src, des) {
  * 拷贝数组 过滤特定序号的元素
  */
 export function excelHeaderCopy(arr: string[], filterItem: number[]) {
-  let des: string[] = [];
+  const des: string[] = [];
   for (let i = 0; i < arr.length; i++) {
     if (filterItem.indexOf(i) == -1) {
       des.push(arr[i]);
@@ -403,7 +411,7 @@ export function excelHeaderCopy(arr: string[], filterItem: number[]) {
  * @param filterVal
  */
 export function arrayToMap(arrKey: string[], arrVal: string[]) {
-  let map: { [key: string]: string } = {};
+  const map: { [key: string]: string } = {};
   for (let i = 0; i < arrKey.length; i++) {
     map[arrKey[i]] = arrVal[i];
   }
@@ -414,11 +422,11 @@ export function arrayToMap(arrKey: string[], arrVal: string[]) {
  * 校验导入的模板数据是否正确
  */
 export function excelDataeplace(beidou: any, results: any, newResults: any) {
-  let msg: string[] = [];
-  let errors = beidou.tplBody.errors;
+  const msg: string[] = [];
+  const errors = beidou.tplBody.errors;
   for (let i = 0; i < results.length; i++) {
-    let item: any = {};
-    for (let key in results[i]) {
+    const item: any = {};
+    for (const key in results[i]) {
       if (beidou.tplBody[key] != undefined) {
         if (beidou.tplBody[key][results[i][key]] != undefined) {
           //替换成数值
@@ -435,7 +443,7 @@ export function excelDataeplace(beidou: any, results: any, newResults: any) {
   }
   if (msg.length > 0) {
     //数组去重
-    let m = Array.from(new Set(msg));
+    const m = Array.from(new Set(msg));
     return "内容不合法：" + m.join();
   }
   return "";
@@ -484,7 +492,7 @@ export function removeHtmlTags(str: string) {
 
 //替换空内容为“-”
 export function emptyTo_(str: string) {
-  if(isEmpty(str)) {
+  if (isEmpty(str)) {
     return "_";
   }
   return str;
@@ -508,7 +516,9 @@ export function excelSerialToJSDate(excelDate) {
     // Excel的日期系统从1900-01-01开始（Windows）
     // 使用更可靠的转换算法
     const excelEpoch = new Date(1900, 0, 1); // 基准日期
-    const date = new Date(excelEpoch.getTime() + (excelDate * 24 * 60 * 60 * 1000));
+    const date = new Date(
+      excelEpoch.getTime() + excelDate * 24 * 60 * 60 * 1000
+    );
 
     // 调整Excel的闰年错误（1900年不是闰年，但Excel认为是）
     if (excelDate >= 60) {
@@ -517,13 +527,13 @@ export function excelSerialToJSDate(excelDate) {
 
     // 验证日期是否有效
     if (isNaN(date.getTime())) {
-      throw new Error('转换后的日期无效');
+      throw new Error("转换后的日期无效");
     }
 
     // 格式化日期
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
     result = `${year}/${month}/${day}`;
   } catch (error) {
@@ -534,15 +544,15 @@ export function excelSerialToJSDate(excelDate) {
 
 //型号是否存在模式，存在则截取#之前的数据
 export function getModelPrefix(model: string) {
-  let m = {model: model, mode: -1};
-  if(model.indexOf("#")>=0){
-    let arr = model.split("#");
+  const m = { model: model, mode: -1 };
+  if (model.indexOf("#") >= 0) {
+    const arr = model.split("#");
     m.model = arr[0];
-    if(arr.length > 1){
-      if(arr[1].indexOf("双模")>=0){
+    if (arr.length > 1) {
+      if (arr[1].indexOf("双模") >= 0) {
         m.mode = 3;
-      }else{
-        m.mode = arr[1].indexOf("RDSS")>=0 ? 1 : 2;
+      } else {
+        m.mode = arr[1].indexOf("RDSS") >= 0 ? 1 : 2;
       }
     }
   }

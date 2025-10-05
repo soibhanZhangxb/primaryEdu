@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick } from "vue";
 import Konva from "konva";
+import type { TextConfig } from "konva/types/shapes/Text";
 
 defineOptions({ name: "DrawingTool" });
 const props = defineProps({
@@ -17,6 +18,9 @@ const emit = defineEmits([
 ]);
 
 // 绘图相关状态
+const curStrokeColor = ref("#df4b26");
+const curIsDashed = ref(false);
+const selectedStrokeColor = ref("");
 const drawingMode = ref("free");
 const showDrawingToolbar = ref(false);
 const drawingHistory = ref<any[]>([]); // 绘图历史记录
@@ -32,9 +36,28 @@ const drawingModes = [
   { value: "free", label: "自由" },
   { value: "line", label: "直线" },
   { value: "arrow", label: "箭头" },
+  { value: "triangle", label: "三角形" },
   { value: "rect", label: "长方形" },
   { value: "circle", label: "圆形" },
+  { value: "text", label: "文本" },
   { value: "select", label: "选择" }
+];
+const curDash = [10, 5];
+const predefineColors = [
+  "#ff4500",
+  "#ff8c00",
+  "#ffd700",
+  "#90ee90",
+  "#00ced1",
+  "#1e90ff",
+  "#c71585",
+  "rgba(255, 69, 0, 0.68)",
+  "rgb(255, 120, 0)",
+  "hsv(51, 100, 98)",
+  "hsvl(120, 40, 94, 0.5)",
+  "hsl(181, 100%, 37%)",
+  "hsla(209, 100%, 56%, 0.73)",
+  "#c7158577"
 ];
 
 const currentModeLabel = computed(() => {
@@ -53,7 +76,7 @@ const toggleDrawing = () => {
   } else {
     // 退出绘图模式时清除选中状态
     if (selectedShape.value) {
-      selectedShape.value.stroke("#df4b26");
+      selectedShape.value.stroke(selectedStrokeColor.value);
       selectedShape.value.strokeWidth(3);
       selectedShape.value = null;
     }
@@ -70,7 +93,7 @@ const toggleDrawing = () => {
 const setDrawingMode = (mode: string) => {
   // 清除之前的选中状态
   if (selectedShape.value) {
-    selectedShape.value.stroke("#df4b26");
+    selectedShape.value.stroke(selectedStrokeColor.value);
     selectedShape.value.strokeWidth(3);
     selectedShape.value = null;
   }
@@ -166,7 +189,13 @@ const initTransformer = () => {
 
 // 选中或者切换 shape
 const selectShape = (shape: Konva.Shape) => {
-  if (!props.enableDrawing || !shape || isTransforming.value) return;
+  if (
+    !props.enableDrawing ||
+    !shape ||
+    shape._partialText !== undefined ||
+    isTransforming.value
+  )
+    return;
 
   //检查当选中的shape是否在绘画数组里存在？
   let b = false;
@@ -189,11 +218,12 @@ const selectShape = (shape: Konva.Shape) => {
 
   // 取消之前选中的图形
   if (selectedShape.value) {
-    selectedShape.value.stroke("#df4b26");
+    selectedShape.value.stroke(selectedStrokeColor.value);
     selectedShape.value.strokeWidth(3);
   }
 
   // 选中新图形
+  selectedStrokeColor.value = shape.stroke();
   shape.stroke("#3a7bd5");
   shape.strokeWidth(4);
   selectedShape.value = shape;
@@ -231,7 +261,7 @@ const handleMouseDown = (e: any) => {
   // 如果点击的是空白处，取消选中
   if (e.target === stage) {
     if (selectedShape.value) {
-      selectedShape.value.stroke("#df4b26");
+      selectedShape.value.stroke(curStrokeColor.value);
       selectedShape.value.strokeWidth(3);
       selectedShape.value = null;
     }
@@ -249,35 +279,52 @@ const handleMouseDown = (e: any) => {
   if (!pos) return;
 
   startPos = pos;
+  console.log(`curIsDashed: ${curIsDashed.value}`);
   switch (drawingMode.value) {
     case "free":
       lastShape = new Konva.Line({
-        stroke: "#df4b26",
+        stroke: curStrokeColor.value,
         strokeWidth: 3,
         points: [pos.x, pos.y],
         tension: 0,
         draggable: true,
+        dash: curIsDashed.value ? curDash : undefined,
         strokeScaleEnabled: false
       });
       break;
     case "line":
       lastShape = new Konva.Line({
-        stroke: "#df4b26",
+        stroke: curStrokeColor.value,
         strokeWidth: 3,
         points: [pos.x, pos.y, pos.x, pos.y],
         draggable: true,
+        dash: curIsDashed.value ? curDash : undefined,
         strokeScaleEnabled: false
       });
       break;
     case "arrow":
       lastShape = new Konva.Arrow({
         points: [pos.x, pos.y, pos.x, pos.y],
-        stroke: "#df4b26",
+        fill: curStrokeColor.value,
+        stroke: curStrokeColor.value,
         strokeWidth: 3,
-        fill: "#df4b26",
         pointerLength: 10,
         pointerWidth: 10,
         draggable: true,
+        dash: curIsDashed.value ? curDash : undefined,
+        strokeScaleEnabled: false
+      });
+      break;
+    //{ value: "triangle", label: "三角形" },
+    case "triangle":
+      lastShape = new Konva.Line({
+        fill: "transparent",
+        stroke: curStrokeColor.value,
+        strokeWidth: 3,
+        points: [pos.x, pos.y, pos.x, pos.y],
+        draggable: true,
+        closed: true,
+        dash: curIsDashed.value ? curDash : undefined,
         strokeScaleEnabled: false
       });
       break;
@@ -287,9 +334,10 @@ const handleMouseDown = (e: any) => {
         y: pos.y,
         width: 0,
         height: 0,
-        stroke: "#df4b26",
+        stroke: curStrokeColor.value,
         strokeWidth: 3,
         draggable: true,
+        dash: curIsDashed.value ? curDash : undefined,
         strokeScaleEnabled: false
       });
       break;
@@ -298,11 +346,28 @@ const handleMouseDown = (e: any) => {
         x: pos.x,
         y: pos.y,
         radius: 0,
-        stroke: "#df4b26",
+        stroke: curStrokeColor.value,
         strokeWidth: 3,
         draggable: true,
+        dash: curIsDashed.value ? curDash : undefined,
         strokeScaleEnabled: false
       });
+      break;
+    case "text":
+      let lastShapeT = new Konva.Text({
+        x: pos.x,
+        y: pos.y,
+        text: "输入文本",
+        fontSize: 30,
+        fontFamily: "Calibri",
+        fill: curStrokeColor.value,
+        draggable: true
+      });
+      // 添加双击事件
+      lastShapeT.on("dblclick dbltap", (e: any) => {
+        startTextEditing(lastShapeT);
+      });
+      lastShape = lastShapeT;
       break;
   }
 
@@ -319,7 +384,6 @@ const handleMouseDown = (e: any) => {
 
 const handleMouseMove = (e: any) => {
   if (!isDrawing || !props.enableDrawing || !lastShape) return;
-
   //获取舞台鼠标位置
   const pos = e.target.getStage().getPointerPosition();
   if (!pos) return;
@@ -335,6 +399,16 @@ const handleMouseMove = (e: any) => {
     case "arrow":
       lastShape.points([startPos.x, startPos.y, pos.x, pos.y]);
       break;
+    case "triangle":
+      lastShape.points([
+        startPos.x,
+        startPos.y,
+        pos.x + 150,
+        pos.y + 150,
+        pos.x + (pos.x - startPos.x) / 2,
+        pos.y + (pos.y - startPos.y) / 2
+      ]);
+      break;
     case "rect":
       lastShape.width(Math.abs(pos.x - startPos.x));
       lastShape.height(Math.abs(pos.y - startPos.y));
@@ -347,14 +421,61 @@ const handleMouseMove = (e: any) => {
       const radius = Math.sqrt(dx * dx + dy * dy);
       lastShape.radius(radius);
       break;
+    case "text":
+      break;
   }
-
   props.drawingLayerRef.getNode().batchDraw();
 };
 
 const handleMouseUp = () => {
   isDrawing = false;
 };
+
+// 开始编辑文本
+const isEditing = ref(false);
+const inputRef = ref<HTMLInputElement>();
+const activeTextRef = ref<Konva.Text>();
+//const textNodes = ref<Konva.Text[]>([]);
+const startTextEditing = async (textNode: Konva.Text) => {
+  isEditing.value = true;
+  activeTextRef.value = textNode;
+
+  await nextTick();
+  //const stage = props.stageRef?.getStage();
+  const stageContainer = props.stageRef?.getStage()?.getContainer();
+  if (!inputRef.value || !stageContainer) return;
+
+  // 获取文本位置
+  const stageBox = stageContainer.getBoundingClientRect();
+  const textPos = textNode.getAbsolutePosition();
+  const textBox = textNode.getClientRect();
+
+  // 设置输入框样式
+  inputRef.value.value = textNode.text();
+  inputRef.value.style.position = "absolute";
+  inputRef.value.style.top = `${stageBox.top + textPos.y - 227}px`;
+  inputRef.value.style.left = `${stageBox.left + textPos.x - 165}px`;
+  inputRef.value.style.width = `${textBox.width}px`;
+  inputRef.value.style.height = `${textBox.height}px`;
+  inputRef.value.style.fontSize = `${textNode.fontSize()}px`;
+  inputRef.value.style.display = "block";
+  inputRef.value.style.zIndex = "1000";
+
+  // 聚焦输入框
+  inputRef.value.focus();
+  inputRef.value.select();
+};
+
+// 结束编辑
+const endTextEditing = () => {
+  if (!isEditing.value || !inputRef.value || !activeTextRef.value) return;
+
+  activeTextRef.value.text(inputRef.value.value);
+  inputRef.value.style.display = "none";
+  isEditing.value = false;
+  //layerRef.value!.draw();
+};
+
 // 生命周期钩子
 onMounted(() => {
   watch(
@@ -392,6 +513,14 @@ onMounted(() => {
 <template>
   <div>
     <!-- 绘图控制按钮 -->
+
+    <el-color-picker
+      v-model="curStrokeColor"
+      :show-alpha="true"
+      class="mr-[10px]"
+      :predefine="predefineColors"
+    />
+    <span class="mr-[10px]"> 虚框<el-switch v-model="curIsDashed" /></span>
     <el-button
       :type="props.enableDrawing ? 'primary' : ''"
       @click="toggleDrawing"
@@ -436,6 +565,14 @@ onMounted(() => {
       >
         {{ mode.label }}
       </el-button>
+      <input
+        ref="inputRef"
+        type="text"
+        class="text-input"
+        style="display: none"
+        @blur="endTextEditing"
+        @keyup.enter="endTextEditing"
+      />
     </div>
   </div>
 </template>
@@ -444,5 +581,14 @@ onMounted(() => {
 /* Using Tailwind CSS, no additional styles needed */
 .dtoobar > .el-button {
   margin-left: 0 !important;
+}
+.text-input {
+  padding: 0;
+  margin: 0;
+  border: 1px solid #3498db;
+  outline: none;
+  background: white;
+  font-family: Arial;
+  box-sizing: border-box;
 }
 </style>

@@ -10,11 +10,11 @@ export default {
   },
   children: [
     {
-      path: "/maths/stickmen",
-      name: "StickMen", //Trig Function
-      component: () => import("@/views/maths/stickmen.vue"),
+      path: "/maths/jquadratic",
+      name: "JQuadratic", //
+      component: () => import("@/views/maths/jquadratic.vue"),
       meta: {
-        title: "火柴人"
+        title: "二次函数"
       }
     },
     {
@@ -23,14 +23,6 @@ export default {
       component: () => import("@/views/maths/jlinear.vue"),
       meta: {
         title: "一次函数"
-      }
-    },
-    {
-      path: "/maths/jquadratic",
-      name: "JQuadratic", //
-      component: () => import("@/views/maths/jquadratic.vue"),
-      meta: {
-        title: "二次函数"
       }
     },
     {
@@ -54,7 +46,15 @@ export default {
       name: "JCircle", //Trig Function
       component: () => import("@/views/maths/jcircle.vue"),
       meta: {
-        title: "初中圆"
+        title: "圆"
+      }
+    },
+    {
+      path: "/maths/jgeometry",
+      name: "JGeometry", //Trig Function
+      component: () => import("@/views/maths/jgeometry.vue"),
+      meta: {
+        title: "几何"
       }
     },
     {
@@ -74,11 +74,19 @@ export default {
       }
     },
     {
-      path: "/maths/jtest",
-      name: "JTest", //Trig Function
-      component: () => import("@/views/maths/jtest.vue"),
+      path: "/maths/stickmen",
+      name: "StickMen", //Trig Function
+      component: () => import("@/views/maths/stickmen.vue"),
       meta: {
-        title: "测试"
+        title: "火柴人"
+      }
+    },
+    {
+      path: "/maths/stickmen2",
+      name: "StickMen2", //Trig Function
+      component: () => import("@/views/maths/stickmen2.vue"),
+      meta: {
+        title: "火柴人2"
       }
     },
     {
@@ -90,11 +98,11 @@ export default {
       }
     },
     {
-      path: "/maths/tmp",
-      name: "JTmp", //Trig Function
-      component: () => import("@/views/maths/jtmp.vue"),
+      path: "/maths/template",
+      name: "JTemplate", //Trig Function
+      component: () => import("@/views/maths/template.vue"),
       meta: {
-        title: "左右模板"
+        title: "模板"
       }
     }
   ]

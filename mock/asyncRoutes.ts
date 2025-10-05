@@ -3,7 +3,6 @@ import { defineFakeRoute } from "vite-plugin-fake-server/client";
 //import { system, monitor, permission, frame, tabs } from "@/router/enums";
 import { rshouce } from "@/router/enums";
 
-
 /**
  * roles：页面级别权限，这里模拟二种 "admin"、"common"
  * admin：管理员角色
@@ -329,52 +328,58 @@ const frameRouter = {
     rank: rshouce
   },
   children: [
-      {
-        path: "/iframe/frameC",
-        name: "FrameC++",
-        meta: {
-          title: "C++ 手册",
-          frameSrc: "https://www.shouce.ren/api/c/index.htm#",
-          keepAlive: true,
-          roles: ["admin", "common"]
-        }
-      },
-      {
-        path: "/iframe/colorhunt",
-        name: "FrameColorHunt",
-        meta: {
-          title: "menus.pureColorHuntDoc",
-          frameSrc: "https://colorhunt.co/",
-          keepAlive: true,
-          roles: ["admin", "common"]
-        }
-      },
-      {
-        path: "/iframe/tailwindcss",
-        name: "FrameTailwindcss",
-        meta: {
-          title: "menus.pureTailwindcssDoc",
-          frameSrc: "https://tailwindcss.com/docs/installation",
-          keepAlive: true,
-          roles: ["admin", "common"]
-        }
-      },
-      {
-        path: "/external",
-        name: "https://pure-admin.cn/",
-        meta: {
-          title: "menus.pureExternalLink",
-          roles: ["admin", "common"]
-        }
-      },
-      {
-        path: "/pureUtilsLink",
-        name: "https://pure-admin-utils.netlify.app/",
-        meta: {
-          title: "menus.pureUtilsLink",
-          roles: ["admin", "common"]
-        }
+    {
+      path: "/luoguJSLink",
+      name: "https://www.luogu.com.cn/training/609590",
+      meta: {
+        title: "2025年CSP-J/S冲刺 - 勇者剧场"
       }
+    },
+    {
+      path: "/iframe/frameC",
+      name: "FrameC++",
+      meta: {
+        title: "C++ 手册",
+        frameSrc: "https://www.shouce.ren/api/c/index.htm#",
+        keepAlive: true
+      }
+    },
+    {
+      path: "/iframe/colorhunt",
+      name: "FrameColorHunt",
+      meta: {
+        title: "menus.pureColorHuntDoc",
+        frameSrc: "https://colorhunt.co/",
+        keepAlive: true,
+        roles: ["admin", "common"]
+      }
+    },
+    {
+      path: "/iframe/tailwindcss",
+      name: "FrameTailwindcss",
+      meta: {
+        title: "menus.pureTailwindcssDoc",
+        frameSrc: "https://tailwindcss.com/docs/installation",
+        keepAlive: true,
+        roles: ["admin", "common"]
+      }
+    },
+    {
+      path: "/external",
+      name: "https://pure-admin.cn/",
+      meta: {
+        title: "menus.pureExternalLink",
+        roles: ["admin", "common"]
+      }
+    },
+    {
+      path: "/pureUtilsLink",
+      name: "https://pure-admin-utils.netlify.app/",
+      meta: {
+        title: "menus.pureUtilsLink",
+        roles: ["admin", "common"]
+      }
+    }
   ]
 };
 
@@ -389,7 +394,7 @@ export default defineFakeRoute([
           //systemManagementRouter,
           //systemMonitorRouter,
           //permissionRouter,
-          frameRouter,
+          frameRouter
           //tabsRouter
         ]
       };

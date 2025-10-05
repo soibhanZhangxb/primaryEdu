@@ -1,0 +1,1 @@
+import{t}from"./data-CJGgjWmd.js";import{d as o,C as r,m as p,g as n,a as s}from"./index-Dks_UUQM.js";const d=o({__name:"stripe",setup(l){const e=[{label:"日期",prop:"date"},{label:"姓名",prop:"name"},{label:"地址",prop:"address"}];return(c,m)=>{const a=r("pure-table");return n(),p(a,{data:s(t),columns:e,stripe:""},null,8,["data"])}}});export{d as _};

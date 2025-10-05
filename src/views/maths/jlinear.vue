@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import DUtils from "@/utils/my/dutils";
 import KTextWithBg from "@/views/components/konva/KTextWithBg.vue";
-import DrawingTool from "@/views/components/konva/DrawingTool.vue"; // 导入新的绘图组件
+import DrawingTool from "@/views/components/konva/DrawingTool.vue";
+import { filterSpecialChars2 } from "@/utils/my/myUtils";
+import { parseLineFunction } from "@/utils/my/functional"; // 导入新的绘图组件
+import MathJax from "vue-mathjax-v3";
 
 defineOptions({ name: "JLinear" });
 
@@ -17,13 +20,14 @@ const gGrid = ref({ lines: [], labels: [] });
 const k = ref(1); // 正比例系数
 const showK = ref(true);
 const b = ref(0);
+const lineFunction = ref("x");
 const showB = ref(true);
 const showGraph = ref(true);
 const showGrid = ref(true);
 const showXIntercept = ref(true);
 const enableDrawing = ref(false);
 const mousePos = ref({ x: 0, y: 0 }); //当前鼠标坐标位置
-
+const formulaK = `$$(y-b) \\over x $$`;
 // Canvas references
 const stageRef = ref<any>(null);
 const drawingLayerRef = ref<any>(null);
@@ -31,11 +35,11 @@ const drawingLayerRef = ref<any>(null);
 // Computed properties
 //方程式
 const equation = computed(() => {
-  let y = "y = ";
+  let y = "";
   const { value: kVal } = k;
   const { value: bVal } = b;
   // 处理k为0的特殊情况
-  if (kVal === 0) return `y = ${bVal}`;
+  if (kVal === 0) return `${bVal}`;
   // 处理斜率部分
   if (Math.abs(kVal) === 1) {
     y += kVal > 0 ? "x" : "-x";
@@ -66,8 +70,8 @@ const slopeTriangle = computed(() => {
   const triangleY = k.value * triangleX + b.value;
   const startX = origin.x + triangleX * SCALE;
   const startY = origin.y - triangleY * SCALE;
-  const horizontalLength = SCALE;
-  const verticalLength = k.value * SCALE;
+  const horizontalLength = SCALE * 5;
+  const verticalLength = k.value * SCALE * 5;
 
   return {
     points: [
@@ -84,7 +88,7 @@ const slopeTriangle = computed(() => {
     closed: true
   };
 });
-//一次函数线
+//绘制一次函数线的点
 const equationLine = computed(() => {
   if (!showGraph.value) return null;
 
@@ -189,7 +193,20 @@ const resetView = () => {
   k.value = 1;
   b.value = 0;
 };
-
+const handleOk = () => {
+  let str = filterSpecialChars2(lineFunction.value);
+  if (str != lineFunction.value) {
+    lineFunction.value = str;
+  }
+  let result = parseLineFunction(str);
+  k.value = result.k;
+  b.value = result.b;
+  //lineFunction.value = result.f;
+};
+const handleClear = () => {
+  k.value = 1;
+  b.value = 0;
+};
 // Lifecycle hooks
 onMounted(() => {
   gGrid.value = DUtils.drawGrid(CANVAS_WIDTH, CANVAS_HEIGHT, origin, SCALE);
@@ -206,6 +223,10 @@ onMounted(() => {
       }
     });
   }
+});
+//监控k,b变化
+watch([k, b], () => {
+  lineFunction.value = equation.value;
 });
 </script>
 
@@ -254,7 +275,7 @@ onMounted(() => {
 
                 <!-- Markers，x截距和y截距， 右上角公式 -->
                 <k-text-with-bg
-                  :text="'斜率: (y-b)/x = ' + k.toFixed(2)"
+                  :text="'斜率: ' + k?.toFixed(2)"
                   :x="CANVAS_WIDTH - 200"
                   :y="2"
                   :fontSize="16"
@@ -311,60 +332,63 @@ onMounted(() => {
     </div>
 
     <!-- Control Panel -->
-    <div class="w-full md:w-80 space-y-6">
+    <div class="w-full md:w-120 space-y-2">
+      <!-- 参数控制 -->
+      <!-- 参数控制 -->
       <div class="bg-white p-4 rounded-lg shadow border-left-blue">
-        <h3 class="text-lg font-semibold mb-4 text-gray-800">方程信息:</h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">标准形式</p>
-            <p class="text-xl font-mono font-bold text-blue-600">
-              {{ equation }}
-            </p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">斜率</p>
-            <p class="text-lg font-mono">{{ k.toFixed(2) }}</p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">Y轴交点</p>
-            <p class="text-lg font-mono">{{ yIntercept.toFixed(2) }}</p>
-          </div>
-          <div class="flex items-center justify-between h-full">
-            <p class="text-sm text-gray-600">X轴交点</p>
-            <p class="text-lg font-mono">
-              {{ xIntercept !== null ? xIntercept.toFixed(2) : "无" }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white p-4 rounded-lg shadow">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">参数控制</h3>
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              斜率k: {{ k.toFixed(2) }}
-            </label>
+        <el-form>
+          <el-form-item label="斜率k" class="">
             <el-slider v-model="k" :min="-5" :max="5" :step="0.1" show-input />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
-              截距: {{ b.toFixed(2) }}
-            </label>
+          </el-form-item>
+          <el-form-item label="截距b" class="">
             <el-slider
               v-model="b"
               :min="-10"
               :max="10"
               :step="0.1"
-              show-input
+              :show-input="true"
             />
-          </div>
-          <el-button type="info" class="w-full" @click="resetView">
-            重置
-          </el-button>
-        </div>
+          </el-form-item>
+          <el-form-item label="" class="">
+            <el-button type="info" class="w-full" @click="resetView">
+              重置
+            </el-button>
+          </el-form-item>
+        </el-form>
       </div>
-
+      <!-- 函数方程 -->
+      <div class="bg-white p-4 rounded-lg shadow border-left-blue">
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">方程信息:</h3>
+        <el-form class="right-forms" label-position="right" label-width="100">
+          <el-form-item
+            label="y = "
+            class=""
+            style="margin-bottom: 10px !important"
+          >
+            <!-- input失去焦点、按下回车、清空内容 -->
+            <el-input
+              v-model="lineFunction"
+              style="font-size: 21px"
+              @blur="handleOk"
+              @clear="handleClear"
+              @keyup.enter="handleOk"
+            />
+          </el-form-item>
+          <el-form-item label="斜率K = " class="">
+            <MathJax :formula="formulaK" />
+          </el-form-item>
+          <el-form-item label="Y轴交点 = " class="">
+            <p class="text-lg font-mono">{{ yIntercept?.toFixed(2) }}</p>
+          </el-form-item>
+          <el-form-item label="X轴交点 = " class="">
+            <p class="text-lg font-mono">{{ xIntercept?.toFixed(2) }}</p>
+          </el-form-item>
+          <el-form-item label="斜率K关系:" class="">
+            <p class="text-lg font-mono">两条互垂线斜率：K1*K2=-1</p>
+          </el-form-item>
+        </el-form>
+      </div>
       <div class="bg-white p-4 rounded-lg shadow">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">显示选项</h3>
         <div class="space-y-2">
@@ -384,5 +408,8 @@ onMounted(() => {
 /* Using Tailwind CSS, no additional styles needed */
 :deep(.el-slider__input) {
   width: 110px;
+}
+:deep(.MathJax) {
+  margin: 2px 0 !important;
 }
 </style>

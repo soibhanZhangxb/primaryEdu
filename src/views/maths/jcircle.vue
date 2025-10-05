@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from "vue";
-import { Stage, Layer, Circle, Line, Text, Arc } from "vue-konva"; // 导入正确的Konva组件
 
 defineOptions({ name: "JCircle" });
 // 常量定义

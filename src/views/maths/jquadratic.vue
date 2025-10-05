@@ -4,22 +4,22 @@ import DUtils from "@/utils/my/dutils";
 import KTextWithBg from "@/views/components/konva/KTextWithBg.vue";
 import DrawingTool from "@/views/components/konva/DrawingTool.vue";
 import MathJax from "vue-mathjax-v3";
-import { filterSpecialChars } from "@/utils/my/myUtils";
+import { filterSpecialChars2 } from "@/utils/my/myUtils";
 import { parseQuadraticFunction } from "@/utils/my/functional";
 
 defineOptions({ name: "JQuadratic" });
 
 // 常量定义
-let CANVAS_WIDTH = 940;
-let CANVAS_HEIGHT = 680;
-let origin = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2 };
+// 舞台配置
+const stageConfig = { width: 940, height: 680 };
+let origin = { x: stageConfig.width / 2, y: stageConfig.height / 2 };
 const SCALE = 40; // 每单位像素数
 
 const gGrid = ref({ lines: [], labels: [] });
 // 响应式状态
-const a = ref(1); // 二次项系数
-const b = ref(2); // 一次项系数
-const c = ref(-2); // 常数项
+const a = ref(1.0); // 二次项系数
+const b = ref(2.0); // 一次项系数
+const c = ref(-2.0); // 常数项
 const quadraticFunction = ref("x² + 2x - 2");
 const showVertex = ref(true); // 显示顶点
 const showAxis = ref(true); // 显示对称轴
@@ -36,6 +36,9 @@ const mousePos = ref({ x: 0, y: 0 }); // 当前鼠标坐标位置
 const formula = "$$x = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}$$";
 const topXY = "$$({-b \\over 2a}， {{4ac - b^2} \\over 4a})$$"; //"（ -b/(2a),  c - b²/(4a) ）";
 const axisX = "$${-b \\over 2a}$$"; //抛物线对称轴
+//韦达定理
+const mulX = "$${c \\over a}$$";
+const addX = "$${-b \\over a}$$";
 // Canvas引用
 const stageRef = ref<any>(null);
 const drawingLayerRef = ref<any>(null);
@@ -164,7 +167,7 @@ const axisLine = computed(() => {
   const x = origin.x + axisOfSymmetry.value * SCALE;
 
   return {
-    points: [x, 0, x, CANVAS_HEIGHT],
+    points: [x, 0, x, stageConfig.height],
     stroke: "#ff6b6b",
     strokeWidth: 2,
     dash: [5, 5] // 虚线
@@ -274,14 +277,15 @@ const xInterceptsMarkers = computed(() => {
 });
 
 const handleOk = () => {
-  let str = filterSpecialChars(quadraticFunction.value);
+  let str = filterSpecialChars2(quadraticFunction.value);
   if (str != quadraticFunction.value) {
     quadraticFunction.value = str;
   }
   let result = parseQuadraticFunction(str);
-  a.value = result.coefficients.a;
-  b.value = result.coefficients.b;
-  c.value = result.coefficients.c;
+  a.value = result.a;
+  b.value = result.b;
+  c.value = result.c;
+  quadraticFunction.value = result.f;
 };
 const handleClear = () => {
   a.value = 1;
@@ -292,7 +296,12 @@ const handleClear = () => {
 // 生命周期钩子
 onMounted(() => {
   //画网格和x,y轴函数
-  gGrid.value = DUtils.drawGrid(CANVAS_WIDTH, CANVAS_HEIGHT, origin, SCALE);
+  gGrid.value = DUtils.drawGrid(
+    stageConfig.width,
+    stageConfig.height,
+    origin,
+    SCALE
+  );
   // 添加鼠标位置监听
   const stage = stageRef.value?.getStage();
   if (stage) {
@@ -334,10 +343,7 @@ watch([a, b, c], () => {
           </div>
 
           <div class="relative">
-            <v-stage
-              ref="stageRef"
-              :config="{ width: CANVAS_WIDTH, height: CANVAS_HEIGHT }"
-            >
+            <v-stage ref="stageRef" :config="stageConfig">
               <v-layer>
                 <!-- 网格线 -->
                 <v-line
@@ -428,15 +434,23 @@ watch([a, b, c], () => {
         <h3 class="text-lg font-semibold mb-4 text-gray-800">参数控制</h3>
         <el-form>
           <el-form-item label="a" class="">
-            <el-slider v-model="a" :min="-5" :max="5" :step="0.1" show-input />
+            <el-slider
+              v-model="a"
+              :min="-5"
+              :max="5"
+              :step="0.0001"
+              show-input
+              :show-input-controls="false"
+            />
           </el-form-item>
           <el-form-item label="b" class="">
             <el-slider
               v-model="b"
               :min="-10"
               :max="10"
-              :step="0.1"
-              show-input
+              :step="0.0001"
+              :show-input="true"
+              :show-input-controls="false"
             />
           </el-form-item>
           <el-form-item label="c" class="">
@@ -444,8 +458,9 @@ watch([a, b, c], () => {
               v-model="c"
               :min="-10"
               :max="10"
-              :step="0.1"
+              :step="0.0001"
               show-input
+              :show-input-controls="false"
             />
           </el-form-item>
           <el-form-item label="" class="">
@@ -486,6 +501,9 @@ watch([a, b, c], () => {
           <el-form-item label="顶点坐标:" class="">
             <MathJax :formula="topXY" />
           </el-form-item>
+          <el-form-item label="两根:" class="">
+            之和：<MathJax :formula="addX" />、乘积：<MathJax :formula="mulX" />
+          </el-form-item>
         </el-form>
       </div>
 
@@ -510,7 +528,7 @@ watch([a, b, c], () => {
 
 <style scoped lang="scss">
 :deep(.el-slider__input) {
-  width: 110px;
+  width: 80px;
 }
 .right-forms {
   :deep(.el-form-item) {
